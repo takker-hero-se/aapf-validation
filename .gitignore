@@ -1,0 +1,35 @@
+# Large binary samples — distributed via Zenodo only
+# (see README.md "Downloading the samples" for the DOI link)
+samples/
+!samples/.gitkeep
+
+# Binary build outputs — distributed via Zenodo only
+# (rebuild from source with poneglyph/BUILD.md)
+poneglyph/poneglyph.exe
+poneglyph/*.exe
+poneglyph/*.dll
+poneglyph/*.pdb
+
+# Staging artifacts produced by tools/package.ps1
+*.zip
+aapf-validation-*.zip
+
+# Backups left by manual edits
+*.bak
+*~
+
+# Windows / macOS / Linux noise
+Thumbs.db
+desktop.ini
+ehthumbs.db
+.DS_Store
+*.swp
+
+# Editor / IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Local-only operator notes (not for public consumption)
+NOTES.local.md
+TODO.local.md

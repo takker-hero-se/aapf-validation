@@ -1,0 +1,28 @@
+AAPF Validation Dataset
+Copyright (C) 2026 Takayuki Hirose, Hiroshi Koide
+
+This repository contains components under multiple licenses. The PER-COMPONENT
+BREAKDOWN is documented in LICENSE.md (in the same directory as this file).
+
+Summary:
+
+  patches/*.patch                  LGPL-3.0-or-later (libesedb derivative)
+  poneglyph/poneglyph.exe          LGPL-3.0-or-later (static link of libesedb)
+  reproduction/*.ps1, *.txt        CC-BY-4.0
+  docs/*.md, *.md, *.cff, *.json   CC-BY-4.0
+  samples/**                       CC0-1.0   (factual outputs of automated tools)
+
+The primary license for the code-equivalent components of this repository
+(patches and binaries) is the GNU Lesser General Public License v3.0 or later
+(LGPL-3.0-or-later), with full text at:
+
+  https://www.gnu.org/licenses/lgpl-3.0.en.html
+
+For a complete per-file breakdown, see LICENSE.md.
+
+If you redistribute the patches or the Poneglyph binary, your distribution must
+comply with LGPL-3.0 terms. If you redistribute documentation or scripts under
+CC-BY-4.0, you must give appropriate attribution. The samples on Zenodo are
+public-domain (CC0-1.0); citation is appreciated but not required.
+
+For questions, contact the corresponding author: takker0708@gmail.com

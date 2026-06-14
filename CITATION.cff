@@ -1,0 +1,66 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite both the paper and the dataset using the metadata below."
+type: dataset
+title: "AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025"
+abstract: >-
+  Companion artifacts for the paper "Silent Evidence Loss in Windows Server 2025:
+  Cross-Page-Size ESE Format Changes and Their Forensic Integrity Implications"
+  (Forensic Science International: Digital Investigation, 2026). Includes:
+  (a) source-level patches for libesedb that resolve a previously unreported
+  family of WS2025 itagState reinterpretation failures spanning 4 KiB, 16 KiB,
+  and 32 KiB pages with a single one-line universal patch;
+  (b) a Rust-based NTDS.dit analysis tool (Poneglyph) incorporating the universal
+  patch;
+  (c) 14 ESE database samples (ntds.dit, DataStore.edb, WebCacheV01.dat,
+  SRUDB.dat) captured under the Automated Artifact Population Framework on
+  Windows Server 2019 and Windows Server 2025 across Clean, Crashed, and
+  Locked snapshot states;
+  (d) reproduction scripts and expected outputs.
+authors:
+  - family-names: Hirose
+    given-names: Takayuki
+    email: takker0708@gmail.com
+    affiliation: Independent Researcher
+    orcid: "https://orcid.org/XXXX-XXXX-XXXX-XXXX"  # TODO: add Hirose ORCID
+  - family-names: Koide
+    given-names: Hiroshi
+    affiliation: >-
+      Cybersecurity Information Systems Research Division,
+      Research Institute for Information Technology,
+      Kyushu University, Fukuoka, Japan
+    orcid: "https://orcid.org/XXXX-XXXX-XXXX-XXXX"  # TODO: add Koide ORCID
+date-released: 2026-06-14
+version: "1.0.0"
+license: "CC-BY-4.0"
+license-url: "https://creativecommons.org/licenses/by/4.0/"
+url: "https://doi.org/10.5281/zenodo.XXXXXXX"  # TODO: replace with assigned Zenodo DOI
+keywords:
+  - digital forensics
+  - Windows Server 2025
+  - Extensible Storage Engine
+  - ESE
+  - NTDS.dit
+  - DataStore.edb
+  - SRUDB.dat
+  - WebCacheV01.dat
+  - libesedb
+  - tool validation
+  - cross-page-size format change
+  - itagState
+  - ISO/IEC 27042
+  - AAPF
+references:
+  - type: article
+    title: >-
+      Silent Evidence Loss in Windows Server 2025: Cross-Page-Size ESE
+      Format Changes and Their Forensic Integrity Implications
+    authors:
+      - family-names: Hirose
+        given-names: Takayuki
+      - family-names: Koide
+        given-names: Hiroshi
+    journal: "Forensic Science International: Digital Investigation"
+    year: 2026
+    publisher:
+      name: Elsevier
+    # doi: 10.1016/j.fsidi.YYYY.XXXXXX  # TODO: add when assigned

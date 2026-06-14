@@ -1,0 +1,21 @@
+# GitHub language-stats overrides
+
+# Reproduction scripts are PowerShell, document them as such
+reproduction/*.ps1                       linguist-language=PowerShell
+tools/*.ps1                              linguist-language=PowerShell
+
+# Patches are technically Diff but we want them to count as their target (C)
+patches/*.patch                          linguist-language=C linguist-detectable=false
+
+# Manifest is generated, exclude from language stats
+MANIFEST.md                              linguist-generated=true
+expected_outputs.txt                     linguist-generated=true
+
+# Line endings — patches must keep LF for proper Unix `patch` invocation
+*.patch                                  text eol=lf
+*.ps1                                    text eol=crlf
+*.md                                     text eol=lf
+*.cff                                    text eol=lf
+*.json                                   text eol=lf
+*.bib                                    text eol=lf
+*.tex                                    text eol=lf

@@ -1,0 +1,75 @@
+{
+  "title": "AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025",
+  "description": "<p>Companion artifacts for the paper <strong>\"Silent Evidence Loss in Windows Server 2025: Cross-Page-Size ESE Format Changes and Their Forensic Integrity Implications\"</strong> (Forensic Science International: Digital Investigation, 2026).</p><p>Includes: (a) source-level patches for libesedb that resolve a previously unreported family of WS2025 itagState reinterpretation failures spanning 4 KiB, 16 KiB, and 32 KiB pages with a single one-line universal patch; (b) a Rust-based NTDS.dit analysis tool (Poneglyph) incorporating the universal patch; (c) 14 ESE database samples (ntds.dit, DataStore.edb, WebCacheV01.dat, SRUDB.dat) captured under the Automated Artifact Population Framework on Windows Server 2019 and Windows Server 2025 across Clean, Crashed, and Locked snapshot states; (d) reproduction scripts and pre-computed expected outputs.</p><p>See <code>README.md</code> for the full inventory and quick-start instructions, and <code>ETHICAL_USE.md</code> for the intended-use statement.</p>",
+  "upload_type": "dataset",
+  "publication_date": "2026-06-14",
+  "creators": [
+    {
+      "name": "Hirose, Takayuki",
+      "affiliation": "Independent Researcher"
+    },
+    {
+      "name": "Koide, Hiroshi",
+      "affiliation": "Cybersecurity Information Systems Research Division, Research Institute for Information Technology, Kyushu University"
+    }
+  ],
+  "keywords": [
+    "digital forensics",
+    "Windows Server 2025",
+    "Extensible Storage Engine",
+    "ESE",
+    "NTDS.dit",
+    "DataStore.edb",
+    "SRUDB.dat",
+    "WebCacheV01.dat",
+    "libesedb",
+    "tool validation",
+    "cross-page-size format change",
+    "itagState",
+    "ISO/IEC 27042",
+    "Automated Artifact Population Framework",
+    "AAPF"
+  ],
+  "license": "CC-BY-4.0",
+  "access_right": "open",
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.XXXXXXX",
+      "relation": "isSupplementTo",
+      "scheme": "doi",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "https://github.com/libyal/libesedb/issues/78",
+      "relation": "documents",
+      "scheme": "url",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/fox-it/dissect.esedb/pull/46",
+      "relation": "isDerivedFrom",
+      "scheme": "url",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/Velocidex/velociraptor/issues/4606",
+      "relation": "documents",
+      "scheme": "url",
+      "resource_type": "software"
+    }
+  ],
+  "communities": [
+    {
+      "identifier": "dfrws"
+    }
+  ],
+  "subjects": [
+    {
+      "term": "Computer Forensics",
+      "identifier": "https://www.wikidata.org/wiki/Q616129",
+      "scheme": "url"
+    }
+  ],
+  "language": "eng",
+  "notes": "Comments: TODO before upload (replace XXXXXXX placeholders): (1) Replace the related-identifier DOI with the assigned FSI:DI paper DOI when accepted; (2) Add ORCID iDs for both authors in CITATION.cff; (3) Verify community membership ('dfrws') is open or apply for membership; (4) Optional: add subjects with proper ROR/Wikidata identifiers."
+}

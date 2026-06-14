@@ -1,0 +1,180 @@
+# Expected outputs for parse_all.ps1
+#
+# Generated 2026-06-14 against samples/ and poneglyph/poneglyph.exe in this record.
+# Reviewer reproduction should match these line-for-line for the Schema Robustness
+# axis claims. Locked-state record counts may drift by ±1 due to VSS-trigger
+# nondeterminism; see REPRODUCE.md "Tolerance and known sources of nondeterminism".
+
+# Identity / WS2019 / Clean (8KiB, Clean Shutdown)
+Database: samples\identity\2019\clean\ntds.dit
+Tables:   14
+MSysObjects                          1700
+MSysObjectsShadow                    1700
+MSysObjids                            228
+MSysLocales                             8
+MSysDefrag2                             1
+datatable                            7008
+hiddentable                             1
+link_history_table                      0
+link_table                          13688
+sdpropcounttable                        1
+sdproptable                             0
+sd_table                              464
+quota_table                            12
+quota_rebuild_progress_table            1
+
+# Identity / WS2019 / Crashed (8KiB, Clean Shutdown via Stop-Service NTDS)
+Database: samples\identity\2019\crashed\ntds.dit
+Tables:   14
+[same record counts as Clean — Stop-Service performed graceful close]
+
+# Identity / WS2019 / Locked (8KiB, Dirty Shutdown via VSS)
+Database: samples\identity\2019\locked\ntds.dit
+Tables:   14
+[same record counts as Clean — 8KiB libesedb is robust to Dirty state]
+
+# Identity / WS2025 / Clean (32KiB, Clean Shutdown)
+Database: samples\identity\2025\clean\ntds.dit
+Tables:   15
+MSysObjects                          1711
+MSysObjectsShadow                    1711
+MSysObjids                            228
+MSysLocales                             9
+MSysDefrag2                             1
+datatable                            7024
+hiddentable                             1
+hiddentable_optft                       4
+link_history_table                      0
+link_table                          13936
+sdpropcounttable                        1
+sdproptable                             0
+sd_table                              619
+quota_table                            12
+quota_rebuild_progress_table            1
+
+# Identity / WS2025 / Crashed (32KiB, Clean Shutdown via Stop-Service NTDS)
+Database: samples\identity\2025\crashed\ntds.dit
+Tables:   15
+[same record counts as Clean — CONTROL EXPERIMENT for Section 5.5.2 / R2-W3 rebuttal]
+
+# Identity / WS2025 / Locked (32KiB, Dirty Shutdown via VSS) — PARTIAL PARSE
+Database: samples\identity\2025\locked\ntds.dit
+Tables:   10
+hiddentable                             1
+link_history_table                      0
+link_table                          13936
+sdpropcounttable                        1
+sdproptable                             0
+sd_table                              619
+MSysDefrag2                             1
+quota_table                            12
+quota_rebuild_progress_table            1
+hiddentable_optft                       4
+# MISSING from Locked sample (catalog metadata and main datatable, present in Clean):
+#   MSysObjects, MSysObjectsShadow, MSysObjids, MSysLocales, datatable
+# This is the State Resilience Asymmetry analyzed in Section 5.5.2.
+
+# Activity / WS2019 / Clean (32KiB, Dirty Shutdown — WebCache is always Dirty)
+Database: samples\activity\2019\clean\WebCacheV01.dat
+Tables:   8
+MSysObjects                           115
+MSysObjectsShadow                     115
+MSysObjids                             14
+MSysLocales                             8
+PartitionsEx                            1
+BlobEntry_1                             2
+LeakFiles                               0
+Containers                              0
+
+# Activity / WS2019 / Crashed (32KiB, Dirty)
+Database: samples\activity\2019\crashed\WebCacheV01.dat
+[same as Clean — WebCache cannot be cleanly stopped on running OS]
+
+# Activity / WS2019 / Locked (32KiB, Dirty)
+Database: samples\activity\2019\locked\WebCacheV01.dat
+[same as Clean]
+
+# Activity / WS2025 — NOT INCLUDED
+# WebCache subsystem does not initialize on a headless DC; client-OS replication
+# is reserved for future work. See ETHICAL_USE.md and REPRODUCE.md.
+
+# Health / WS2019 / Clean (16KiB, Clean Shutdown)
+Database: samples\health\2019\clean\DataStore.edb
+Tables:   35
+MSysObjects                           621
+MSysObjectsShadow                     621
+MSysObjids                             79
+MSysLocales                             8
+
+# Health / WS2019 / Crashed (16KiB)
+Database: samples\health\2019\crashed\DataStore.edb
+[same as Clean — WU clean-detaches the database]
+
+# Health / WS2019 / Locked (16KiB, Dirty)
+Database: samples\health\2019\locked\DataStore.edb
+[same as Clean]
+
+# Health / WS2025 / Clean (16KiB) — UNIVERSAL PATCH REQUIRED
+# Without universal patch: parse FAILS at page_read_tags @ page 4
+# With universal patch:
+Database: samples\health\2025\clean\DataStore.edb
+Tables:   36
+MSysObjects                           659
+MSysObjectsShadow                     659
+MSysObjids                             82
+MSysLocales                             8
+
+# Health / WS2025 / Crashed (16KiB) — same as Clean
+Database: samples\health\2025\crashed\DataStore.edb
+Tables:   36
+[same record counts as Clean]
+
+# Health / WS2025 / Locked (16KiB, Dirty) — minor snapshot drift
+Database: samples\health\2025\locked\DataStore.edb
+Tables:   36
+MSysObjects                           658
+MSysObjectsShadow                     658
+MSysObjids                             81
+MSysLocales                             8
+
+# Resource / WS2019 / Clean (4KiB, Clean Shutdown)
+Database: samples\resource\2019\clean\SRUDB.dat
+Tables:   12
+MSysObjects                           161
+MSysObjectsShadow                     161
+MSysObjids                             28
+MSysLocales                             7
+SruDbIdMapTable                       228
+SruDbCheckpointTable                    0
+
+# Resource / WS2019 / Partial (4KiB)
+Database: samples\resource\2019\partial\SRUDB.dat
+Tables:   12
+MSysObjects                           161
+MSysObjectsShadow                     161
+MSysObjids                             28
+MSysLocales                             7
+SruDbIdMapTable                       164
+SruDbCheckpointTable                    0
+
+# Resource / WS2025 / Clean (4KiB) — UNIVERSAL PATCH REQUIRED
+# Without universal patch: parse FAILS at page_read_tags @ page 4
+# With universal patch:
+Database: samples\resource\2025\clean\SRUDB.dat
+Tables:   12
+MSysObjects                           165
+MSysObjectsShadow                     165
+MSysObjids                             28
+MSysLocales                             7
+SruDbIdMapTable                       159
+SruDbCheckpointTable                    0
+
+# Resource / WS2025 / Partial (4KiB)
+Database: samples\resource\2025\partial\SRUDB.dat
+Tables:   12
+MSysObjects                           165
+MSysObjectsShadow                     165
+MSysObjids                             28
+MSysLocales                             7
+SruDbIdMapTable                       156
+SruDbCheckpointTable                    0
