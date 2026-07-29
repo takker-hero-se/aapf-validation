@@ -8,7 +8,7 @@ This repository is the companion artifact for the FSI:DI 2026 paper *Silent Evid
 
 1. **Extend AAPF coverage** — additional ESE artifacts (Windows Search `Windows.edb`, Exchange `priv.edb`, Lync archives), additional OS versions, additional snapshot states.
 2. **Improve reproduction** — port `reproduction/*.ps1` to bash for Linux examiners, add Jupyter notebooks for visual inspection, add Docker images for reproducibility.
-3. **Strengthen the patches** — alternative formulations of `fix-ws2025-itag-state.patch` (e.g., format-revision-based discrimination instead of unconditional mask), bug fixes, performance improvements.
+3. **Strengthen the patches** — `003-ws2025-itag-state.patch` now gates the mask on the ESE format revision (`>= 0x0122`); further refinements, bug fixes, or performance improvements are welcome.
 4. **Document related findings** — additional ESE format changes you have identified in WS2025, WS2026, or future Microsoft releases.
 5. **Translate documentation** — Japanese, Korean, Chinese translations of the README and reproduction guides are especially welcome.
 
@@ -63,6 +63,5 @@ See `LICENSE.md` for the per-component breakdown.
 ## Maintainers
 
 - **Takayuki Hirose** (`takker0708@gmail.com`, corresponding author)
-- **Hiroshi Koide** (Kyushu University)
 
 For questions about scope, scheduling, or whether a specific contribution would be welcomed, please open a Discussion or contact the corresponding author directly.

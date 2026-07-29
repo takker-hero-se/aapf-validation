@@ -87,9 +87,7 @@ Documentation:
 
 Not in this commit (distributed via Zenodo only):
 - 14 ESE database samples (730 MB across 4 categories)
-- poneglyph/poneglyph.exe (rebuild via poneglyph/BUILD.md)
-
-Co-authored-by: Hiroshi Koide <koide@cybersec.kyushu-u.ac.jp>"
+- poneglyph/poneglyph.exe (rebuild via poneglyph/BUILD.md)"
 
 # Add the remote and push
 git branch -M main

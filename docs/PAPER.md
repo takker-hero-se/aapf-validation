@@ -9,7 +9,6 @@ This Zenodo record accompanies the following paper.
 ## Authors
 
 - Takayuki Hirose (Independent Researcher, corresponding author: `takker0708@gmail.com`)
-- Hiroshi Koide (Cybersecurity Information Systems Research Division, Research Institute for Information Technology, Kyushu University)
 
 ## Target venue
 
@@ -29,8 +28,8 @@ Submitted 2026; under peer review at the time of this dataset release.
 |---|---|
 | §2 Background | `docs/BADBLOOD_PROVENANCE.md` (provenance of synthetic ESE artifacts) |
 | §3 Issue 1 (itagState, 32 KiB) | `samples/identity/2025/clean/ntds.dit`; `reproduction/REPRODUCE.md` Section 3.2 row |
-| §4 Issue 2 (B-tree zeroed page) | `samples/identity/2025/{clean,crashed,locked}/`; `patches/zzz-fix-ws2025-btree.patch` |
-| §5 Universal fix | `patches/fix-ws2025-itag-state.patch`; `poneglyph/poneglyph.exe` |
+| §4 Issue 2 (B-tree zeroed page) | `samples/identity/2025/{clean,crashed,locked}/`; `patches/006-ws2025-btree.patch` |
+| §5 Format-revision-gated fix | `patches/003-ws2025-itag-state.patch`; `poneglyph/poneglyph.exe` |
 | §6 Issue 3 (16 KiB DataStore) | `samples/health/2025/{clean,crashed,locked}/` |
 | §7 Issue 4 (4 KiB SRUDB) | `samples/resource/2025/{clean,partial}/` |
 | §8 Validation (AAPF) | `samples/`; `reproduction/parse_all.ps1`; `reproduction/expected_outputs.txt` |
@@ -40,7 +39,7 @@ Submitted 2026; under peer review at the time of this dataset release.
 
 ## DOI
 
-This dataset: `10.5281/zenodo.XXXXXXX` (assigned at upload; update CITATION.cff and the in-text references to this DOI before final paper submission).
+This dataset: `10.5281/zenodo.20789636` (assigned at upload; update CITATION.cff and the in-text references to this DOI before final paper submission).
 
 Companion paper DOI: assigned by Elsevier on acceptance; add here when known.
 

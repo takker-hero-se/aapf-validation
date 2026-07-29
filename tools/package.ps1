@@ -71,13 +71,10 @@ $Sources = @(
         To   = (Join-Path $StagingRoot 'samples\resource')
         Inc  = @()
         Exc  = @('final-via-blob.zip')   # Acquisition-pipeline archive; redundant with expanded files
-    },
-    @{
-        From = 'C:\dev\aapf-samples\identity\_validation'
-        To   = (Join-Path $StagingRoot 'samples\_validation')
-        Inc  = @('*.txt')
-        Exc  = @()
     }
+    # Note: samples\_validation\ contents are generated in-place by
+    # tools\run_full_validation.ps1 after the samples are staged.
+    # No copy step here.
 )
 
 if (-not $SkipCopy) {
@@ -133,8 +130,12 @@ if ($DryRun) {
 
 # Generate MANIFEST.md
 Write-Host "Hashing all files in staging tree..." -ForegroundColor Cyan
-$allFiles = Get-ChildItem -Path $StagingRoot -Recurse -File |
-    Where-Object { $_.FullName -notlike "*\tools\package.ps1" -and $_.FullName -notlike "*\MANIFEST.md" } |
+$allFiles = Get-ChildItem -Path $StagingRoot -Recurse -File -Force |
+    Where-Object {
+        $_.FullName -notlike "*\tools\package.ps1" -and `
+        $_.FullName -notlike "*\MANIFEST.md" -and `
+        $_.FullName -notlike "*\.git\*"
+    } |
     Sort-Object FullName
 
 $manifest = @()

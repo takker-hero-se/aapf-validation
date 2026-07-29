@@ -1,82 +1,431 @@
-# Expected outputs for parse_all.ps1
+﻿# Expected outputs for parse_all.ps1
 #
-# Generated 2026-06-14 against samples/ and poneglyph/poneglyph.exe in this record.
-# Reviewer reproduction should match these line-for-line for the Schema Robustness
-# axis claims. Locked-state record counts may drift by ±1 due to VSS-trigger
-# nondeterminism; see REPRODUCE.md "Tolerance and known sources of nondeterminism".
+# Auto-generated from samples/_validation/*.poneglyph.txt by tools/generate_expected_outputs.ps1.
+# Reviewer reproduction should match each section line-for-line modulo VSS-snapshot timing drift
+# (Locked states may differ by +-1 record; see REPRODUCE.md "Tolerance and known sources of nondeterminism").
+#
+# For each sample the canonical parse output is the corresponding _validation/<sample>.poneglyph.txt;
+# the per-page-size, per-shutdown-state metadata is in _validation/<sample>.esentutl.txt;
+# the zeroed-page distribution (R4 Section4.4 evidence) is in _validation/<sample>.zeroed.json.
+#
 
-# Identity / WS2019 / Clean (8KiB, Clean Shutdown)
-Database: samples\identity\2019\clean\ntds.dit
+# === identity-2019-clean ===
+# 8KiB WS2019 baseline (Clean Shutdown)
+
+Database: C:\dev\aapf-validation\samples\identity\2019\clean\ntds.dit
 Tables:   14
+
+Name                              Records
+------------------------------------------
 MSysObjects                          1700
 MSysObjectsShadow                    1700
 MSysObjids                            228
 MSysLocales                             8
-MSysDefrag2                             1
 datatable                            7008
+link_table                          14075
 hiddentable                             1
-link_history_table                      0
-link_table                          13688
-sdpropcounttable                        1
 sdproptable                             0
-sd_table                              464
+sd_table                              745
+sdpropcounttable                        1
+link_history_table                      0
+MSysDefrag2                             1
 quota_table                            12
 quota_rebuild_progress_table            1
 
-# Identity / WS2019 / Crashed (8KiB, Clean Shutdown via Stop-Service NTDS)
-Database: samples\identity\2019\crashed\ntds.dit
-Tables:   14
-[same record counts as Clean — Stop-Service performed graceful close]
+# === identity-2019-crashed ===
+# 8KiB WS2019 -- Stop-Service NTDS produces Clean Shutdown (control for Section4.4)
 
-# Identity / WS2019 / Locked (8KiB, Dirty Shutdown via VSS)
-Database: samples\identity\2019\locked\ntds.dit
+Database: C:\dev\aapf-validation\samples\identity\2019\crashed\ntds.dit
 Tables:   14
-[same record counts as Clean — 8KiB libesedb is robust to Dirty state]
 
-# Identity / WS2025 / Clean (32KiB, Clean Shutdown)
-Database: samples\identity\2025\clean\ntds.dit
+Name                              Records
+------------------------------------------
+MSysObjects                          1700
+MSysObjectsShadow                    1700
+MSysObjids                            228
+MSysLocales                             8
+datatable                            7008
+link_table                          14075
+hiddentable                             1
+sdproptable                             0
+sd_table                              745
+sdpropcounttable                        1
+link_history_table                      0
+MSysDefrag2                             1
+quota_table                            12
+quota_rebuild_progress_table            1
+
+# === identity-2019-locked ===
+# 8KiB WS2019 Dirty Shutdown (VSS) -- parses fully, contrast with 32KiB
+
+Database: C:\dev\aapf-validation\samples\identity\2019\locked\ntds.dit
+Tables:   14
+
+Name                              Records
+------------------------------------------
+MSysObjects                          1700
+MSysObjectsShadow                    1700
+MSysObjids                            228
+MSysLocales                             8
+datatable                            7008
+link_table                          14075
+hiddentable                             1
+sdproptable                             0
+sd_table                              745
+sdpropcounttable                        1
+link_history_table                      0
+MSysDefrag2                             1
+quota_table                            12
+quota_rebuild_progress_table            1
+
+# === identity-2025-clean ===
+# 32KiB WS2025 -- universal patch required for catalog read
+
+Database: C:\dev\aapf-validation\samples\identity\2025\clean\ntds.dit
 Tables:   15
+
+Name                              Records
+------------------------------------------
 MSysObjects                          1711
 MSysObjectsShadow                    1711
 MSysObjids                            228
 MSysLocales                             9
-MSysDefrag2                             1
-datatable                            7024
+datatable                            7030
 hiddentable                             1
-hiddentable_optft                       4
 link_history_table                      0
-link_table                          13936
+link_table                          13978
 sdpropcounttable                        1
 sdproptable                             0
-sd_table                              619
+sd_table                              677
+MSysDefrag2                             1
 quota_table                            12
 quota_rebuild_progress_table            1
+hiddentable_optft                       4
 
-# Identity / WS2025 / Crashed (32KiB, Clean Shutdown via Stop-Service NTDS)
-Database: samples\identity\2025\crashed\ntds.dit
+# === identity-2025-crashed ===
+# 32KiB WS2025 -- Stop-Service produces Clean Shutdown; identical to Clean (R2-W3 rebuttal)
+
+Database: C:\dev\aapf-validation\samples\identity\2025\crashed\ntds.dit
 Tables:   15
-[same record counts as Clean — CONTROL EXPERIMENT for Section 5.5.2 / R2-W3 rebuttal]
 
-# Identity / WS2025 / Locked (32KiB, Dirty Shutdown via VSS) — PARTIAL PARSE
-Database: samples\identity\2025\locked\ntds.dit
-Tables:   10
+Name                              Records
+------------------------------------------
+MSysObjects                          1711
+MSysObjectsShadow                    1711
+MSysObjids                            228
+MSysLocales                             9
+datatable                            7030
 hiddentable                             1
 link_history_table                      0
-link_table                          13936
+link_table                          13978
 sdpropcounttable                        1
 sdproptable                             0
-sd_table                              619
+sd_table                              677
 MSysDefrag2                             1
 quota_table                            12
 quota_rebuild_progress_table            1
 hiddentable_optft                       4
-# MISSING from Locked sample (catalog metadata and main datatable, present in Clean):
-#   MSysObjects, MSysObjectsShadow, MSysObjids, MSysLocales, datatable
-# This is the State Resilience Asymmetry analyzed in Section 5.5.2.
 
-# Activity / WS2019 / Clean (32KiB, Dirty Shutdown — WebCache is always Dirty)
-Database: samples\activity\2019\clean\WebCacheV01.dat
+# === identity-2025-locked ===
+# 32KiB WS2025 Dirty (VSS) -- parses fully (15/15) in this acquisition. An earlier, separate
+# acquisition showed a non-reproduced partial parse (10 of 15); see Section 8.5.3.
+
+Database: C:\dev\aapf-validation\samples\identity\2025\locked\ntds.dit
+Tables:   15
+
+Name                              Records
+------------------------------------------
+MSysObjects                          1711
+MSysObjectsShadow                    1711
+MSysObjids                            228
+MSysLocales                             9
+datatable                            7030
+hiddentable                             1
+link_history_table                      0
+link_table                          13978
+sdpropcounttable                        1
+sdproptable                             0
+sd_table                              677
+MSysDefrag2                             1
+quota_table                            12
+quota_rebuild_progress_table            1
+hiddentable_optft                       4
+
+# === health-2019-clean ===
+# 16KiB WS2019
+
+Database: C:\dev\aapf-validation\samples\health\2019\clean\DataStore.edb
+Tables:   35
+
+Name                              Records
+------------------------------------------
+MSysObjects                           621
+MSysObjectsShadow                     621
+MSysObjids                             79
+MSysLocales                             8
+tbAUState                               0
+tbCcrDownloadData                       2
+tbComputerInfo                          0
+tbDownloadJob                           0
+tbEula                                  0
+tbFiles                              5261
+tbHistory                               2
+tbServerConfig                          3
+tbServerCookies                         7
+tbServiceData                           5
+tbScanTransInfo                         3
+tbStoreVersion                          1
+tbUpdateLocalizedProps                390
+tbUpdates                            1988
+tbHiddenUpdates                         0
+tbLocalUserIds                          0
+tbTimers                                2
+tbSLSData                               4
+tbPerSessionDLData                     14
+tbSignedTimestamps                     12
+tbMergedUpdates                         0
+tbPerSrvUpdate9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUserUpdateData9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUpdateb4f4829443e3b643b1709a65bc822c77        874
+tbPerSrvUserUpdateDatab4f4829443e3b643b1709a65bc822c77          0
+tbPerSrvUpdate7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUserUpdateData7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUpdate27b0248bee1dbbba9a953517dfb9c552         82
+tbPerSrvUserUpdateData27b0248bee1dbbba9a953517dfb9c552          0
+tbPerSrvUpdate18f9717947a8304492794a52d1efe18d       1906
+tbPerSrvUserUpdateData18f9717947a8304492794a52d1efe18d          0
+
+# === health-2019-crashed ===
+# 16KiB WS2019 -- extra log files captured; same parse
+
+Database: C:\dev\aapf-validation\samples\health\2019\crashed\DataStore.edb
+Tables:   35
+
+Name                              Records
+------------------------------------------
+MSysObjects                           621
+MSysObjectsShadow                     621
+MSysObjids                             79
+MSysLocales                             8
+tbAUState                               0
+tbCcrDownloadData                       0
+tbComputerInfo                          0
+tbDownloadJob                           0
+tbEula                                  0
+tbFiles                              5257
+tbHistory                               3
+tbServerConfig                          3
+tbServerCookies                         7
+tbServiceData                           5
+tbScanTransInfo                         3
+tbStoreVersion                          1
+tbUpdateLocalizedProps                378
+tbUpdates                            2189
+tbHiddenUpdates                         0
+tbLocalUserIds                          0
+tbTimers                                2
+tbSLSData                               4
+tbPerSessionDLData                     14
+tbSignedTimestamps                     12
+tbMergedUpdates                         0
+tbPerSrvUpdate9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUserUpdateData9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUpdateb4f4829443e3b643b1709a65bc822c77       1044
+tbPerSrvUserUpdateDatab4f4829443e3b643b1709a65bc822c77          0
+tbPerSrvUpdate7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUserUpdateData7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUpdate27b0248bee1dbbba9a953517dfb9c552         82
+tbPerSrvUserUpdateData27b0248bee1dbbba9a953517dfb9c552          0
+tbPerSrvUpdate18f9717947a8304492794a52d1efe18d       2063
+tbPerSrvUserUpdateData18f9717947a8304492794a52d1efe18d          0
+
+# === health-2019-locked ===
+# 16KiB WS2019
+
+Database: C:\dev\aapf-validation\samples\health\2019\locked\DataStore.edb
+Tables:   35
+
+Name                              Records
+------------------------------------------
+MSysObjects                           621
+MSysObjectsShadow                     621
+MSysObjids                             79
+MSysLocales                             8
+tbAUState                               0
+tbCcrDownloadData                       2
+tbComputerInfo                          0
+tbDownloadJob                           0
+tbEula                                  0
+tbFiles                              5261
+tbHistory                               2
+tbServerConfig                          3
+tbServerCookies                         7
+tbServiceData                           5
+tbScanTransInfo                         3
+tbStoreVersion                          1
+tbUpdateLocalizedProps                390
+tbUpdates                            1988
+tbHiddenUpdates                         0
+tbLocalUserIds                          0
+tbTimers                                2
+tbSLSData                               4
+tbPerSessionDLData                     14
+tbSignedTimestamps                     12
+tbMergedUpdates                         0
+tbPerSrvUpdate9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUserUpdateData9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUpdateb4f4829443e3b643b1709a65bc822c77        874
+tbPerSrvUserUpdateDatab4f4829443e3b643b1709a65bc822c77          0
+tbPerSrvUpdate7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUserUpdateData7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUpdate27b0248bee1dbbba9a953517dfb9c552         82
+tbPerSrvUserUpdateData27b0248bee1dbbba9a953517dfb9c552          0
+tbPerSrvUpdate18f9717947a8304492794a52d1efe18d       1906
+tbPerSrvUserUpdateData18f9717947a8304492794a52d1efe18d          0
+
+# === health-2025-clean ===
+# 16KiB WS2025 -- universal patch required (Issue 3)
+
+Database: C:\dev\aapf-validation\samples\health\2025\clean\DataStore.edb
+Tables:   36
+
+Name                              Records
+------------------------------------------
+MSysObjects                           659
+MSysObjectsShadow                     659
+MSysObjids                             82
+MSysLocales                             8
+tbAUState                               0
+tbCcrDownloadData                       1
+tbComputerInfo                          0
+tbDownloadJob                           0
+tbEula                                  0
+tbEulaMap                               0
+tbFiles                             12019
+tbHistory                               8
+tbServerConfig                          4
+tbServerCookies                        12
+tbServiceData                           5
+tbScanTransInfo                         4
+tbStoreVersion                          1
+tbUpdateLocalizedProps                427
+tbUpdates                            2085
+tbHiddenUpdates                         0
+tbLocalUserIds                          0
+tbTimers                                3
+tbSLSData                               4
+tbPerSessionDLData                     24
+tbSignedTimestamps                     18
+tbMergedUpdates                         0
+tbPerSrvUpdate9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUserUpdateData9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUpdateb4f4829443e3b643b1709a65bc822c77        951
+tbPerSrvUserUpdateDatab4f4829443e3b643b1709a65bc822c77          0
+tbPerSrvUpdate7c8a5e85b4eca34cb0451dfa50104289         96
+tbPerSrvUserUpdateData7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUpdate27b0248bee1dbbba9a953517dfb9c552         82
+tbPerSrvUserUpdateData27b0248bee1dbbba9a953517dfb9c552          0
+tbPerSrvUpdate18f9717947a8304492794a52d1efe18d       1987
+tbPerSrvUserUpdateData18f9717947a8304492794a52d1efe18d          0
+
+# === health-2025-crashed ===
+# 16KiB WS2025 -- WU clean-detach makes this Clean-equivalent
+
+Database: C:\dev\aapf-validation\samples\health\2025\crashed\DataStore.edb
+Tables:   36
+
+Name                              Records
+------------------------------------------
+MSysObjects                           659
+MSysObjectsShadow                     659
+MSysObjids                             82
+MSysLocales                             8
+tbAUState                               0
+tbCcrDownloadData                       1
+tbComputerInfo                          0
+tbDownloadJob                           0
+tbEula                                  0
+tbEulaMap                               0
+tbFiles                             12019
+tbHistory                               8
+tbServerConfig                          4
+tbServerCookies                        12
+tbServiceData                           5
+tbScanTransInfo                         4
+tbStoreVersion                          1
+tbUpdateLocalizedProps                427
+tbUpdates                            2085
+tbHiddenUpdates                         0
+tbLocalUserIds                          0
+tbTimers                                3
+tbSLSData                               4
+tbPerSessionDLData                     24
+tbSignedTimestamps                     18
+tbMergedUpdates                         0
+tbPerSrvUpdate9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUserUpdateData9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUpdateb4f4829443e3b643b1709a65bc822c77        951
+tbPerSrvUserUpdateDatab4f4829443e3b643b1709a65bc822c77          0
+tbPerSrvUpdate7c8a5e85b4eca34cb0451dfa50104289         96
+tbPerSrvUserUpdateData7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUpdate27b0248bee1dbbba9a953517dfb9c552         82
+tbPerSrvUserUpdateData27b0248bee1dbbba9a953517dfb9c552          0
+tbPerSrvUpdate18f9717947a8304492794a52d1efe18d       1987
+tbPerSrvUserUpdateData18f9717947a8304492794a52d1efe18d          0
+
+# === health-2025-locked ===
+# 16KiB WS2025 -- 1-record snapshot drift on MSys tables
+
+Database: C:\dev\aapf-validation\samples\health\2025\locked\DataStore.edb
+Tables:   36
+
+Name                              Records
+------------------------------------------
+MSysObjects                           658
+MSysObjectsShadow                     658
+MSysObjids                             81
+MSysLocales                             8
+tbAUState                               0
+tbCcrDownloadData                       0
+tbComputerInfo                          0
+tbDownloadJob                           0
+tbEula                                  0
+tbEulaMap                               0
+tbFiles                             12019
+tbHistory                               6
+tbServerConfig                          4
+tbServerCookies                         5
+tbServiceData                           5
+tbScanTransInfo                         4
+tbStoreVersion                          1
+tbUpdateLocalizedProps                427
+tbUpdates                            2085
+tbHiddenUpdates                         0
+tbLocalUserIds                          0
+tbTimers                                3
+tbSLSData                               4
+tbPerSessionDLData                     24
+tbSignedTimestamps                     18
+tbMergedUpdates                         0
+tbPerSrvUpdate9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUserUpdateData9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUpdateb4f4829443e3b643b1709a65bc822c77        951
+tbPerSrvUserUpdateDatab4f4829443e3b643b1709a65bc822c77          0
+tbPerSrvUpdate7c8a5e85b4eca34cb0451dfa50104289         96
+tbPerSrvUserUpdateData7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUpdate27b0248bee1dbbba9a953517dfb9c552         82
+tbPerSrvUserUpdateData27b0248bee1dbbba9a953517dfb9c552          0
+tbPerSrvUpdate18f9717947a8304492794a52d1efe18d       1987
+tbPerSrvUserUpdateData18f9717947a8304492794a52d1efe18d          0
+
+# === activity-2019-clean ===
+# 32KiB WS2019 -- WebCache uses 32KiB on WS2019 already (refutes "32K = WS2025 only")
+
+Database: C:\dev\aapf-validation\samples\activity\2019\clean\WebCacheV01.dat
 Tables:   8
+
+Name                              Records
+------------------------------------------
 MSysObjects                           115
 MSysObjectsShadow                     115
 MSysObjids                             14
@@ -86,95 +435,143 @@ BlobEntry_1                             2
 LeakFiles                               0
 Containers                              0
 
-# Activity / WS2019 / Crashed (32KiB, Dirty)
-Database: samples\activity\2019\crashed\WebCacheV01.dat
-[same as Clean — WebCache cannot be cleanly stopped on running OS]
+# === activity-2019-crashed ===
+# 32KiB WS2019 -- WebCache cannot be cleanly stopped; all 3 states equivalent
 
-# Activity / WS2019 / Locked (32KiB, Dirty)
-Database: samples\activity\2019\locked\WebCacheV01.dat
-[same as Clean]
+Database: C:\dev\aapf-validation\samples\activity\2019\crashed\WebCacheV01.dat
+Tables:   8
 
-# Activity / WS2025 — NOT INCLUDED
-# WebCache subsystem does not initialize on a headless DC; client-OS replication
-# is reserved for future work. See ETHICAL_USE.md and REPRODUCE.md.
-
-# Health / WS2019 / Clean (16KiB, Clean Shutdown)
-Database: samples\health\2019\clean\DataStore.edb
-Tables:   35
-MSysObjects                           621
-MSysObjectsShadow                     621
-MSysObjids                             79
+Name                              Records
+------------------------------------------
+MSysObjects                           115
+MSysObjectsShadow                     115
+MSysObjids                             14
 MSysLocales                             8
+PartitionsEx                            1
+BlobEntry_1                             2
+LeakFiles                               0
+Containers                              0
 
-# Health / WS2019 / Crashed (16KiB)
-Database: samples\health\2019\crashed\DataStore.edb
-[same as Clean — WU clean-detaches the database]
+# === activity-2019-locked ===
+# 32KiB WS2019
 
-# Health / WS2019 / Locked (16KiB, Dirty)
-Database: samples\health\2019\locked\DataStore.edb
-[same as Clean]
+Database: C:\dev\aapf-validation\samples\activity\2019\locked\WebCacheV01.dat
+Tables:   8
 
-# Health / WS2025 / Clean (16KiB) — UNIVERSAL PATCH REQUIRED
-# Without universal patch: parse FAILS at page_read_tags @ page 4
-# With universal patch:
-Database: samples\health\2025\clean\DataStore.edb
-Tables:   36
-MSysObjects                           659
-MSysObjectsShadow                     659
-MSysObjids                             82
+Name                              Records
+------------------------------------------
+MSysObjects                           115
+MSysObjectsShadow                     115
+MSysObjids                             14
 MSysLocales                             8
+PartitionsEx                            1
+BlobEntry_1                             2
+LeakFiles                               0
+Containers                              0
 
-# Health / WS2025 / Crashed (16KiB) — same as Clean
-Database: samples\health\2025\crashed\DataStore.edb
-Tables:   36
-[same record counts as Clean]
+# === resource-2019-clean ===
+# 4KiB WS2019 -- Stop-Service DPS clean stop
 
-# Health / WS2025 / Locked (16KiB, Dirty) — minor snapshot drift
-Database: samples\health\2025\locked\DataStore.edb
-Tables:   36
-MSysObjects                           658
-MSysObjectsShadow                     658
-MSysObjids                             81
-MSysLocales                             8
-
-# Resource / WS2019 / Clean (4KiB, Clean Shutdown)
-Database: samples\resource\2019\clean\SRUDB.dat
+Database: C:\dev\aapf-validation\samples\resource\2019\clean\SRUDB.dat
 Tables:   12
+
+Name                              Records
+------------------------------------------
 MSysObjects                           161
 MSysObjectsShadow                     161
 MSysObjids                             28
 MSysLocales                             7
 SruDbIdMapTable                       228
 SruDbCheckpointTable                    0
+{17F4D97B-F26A-5E79-3A82-90040A47D13D}        110
+{841A7317-3805-518B-C2EA-AD224CB4AF84}         73
+{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}       2146
+{DC3D3B50-BB90-5066-FA4E-A5F90DD8B677}         37
+{DD6636C4-8929-4683-974E-22C046A43763}         37
+{EEE2F477-0659-5C47-EF03-6D6BEFD441B3}         37
 
-# Resource / WS2019 / Partial (4KiB)
-Database: samples\resource\2019\partial\SRUDB.dat
+# === resource-2019-partial ===
+# 4KiB WS2019 -- partial / mid-collection snapshot
+
+Database: C:\dev\aapf-validation\samples\resource\2019\partial\SRUDB.dat
 Tables:   12
+
+Name                              Records
+------------------------------------------
 MSysObjects                           161
 MSysObjectsShadow                     161
 MSysObjids                             28
 MSysLocales                             7
 SruDbIdMapTable                       164
 SruDbCheckpointTable                    0
+{17F4D97B-F26A-5E79-3A82-90040A47D13D}         38
+{841A7317-3805-518B-C2EA-AD224CB4AF84}         25
+{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}        782
+{DC3D3B50-BB90-5066-FA4E-A5F90DD8B677}         13
+{DD6636C4-8929-4683-974E-22C046A43763}         13
+{EEE2F477-0659-5C47-EF03-6D6BEFD441B3}         13
 
-# Resource / WS2025 / Clean (4KiB) — UNIVERSAL PATCH REQUIRED
-# Without universal patch: parse FAILS at page_read_tags @ page 4
-# With universal patch:
-Database: samples\resource\2025\clean\SRUDB.dat
+# === resource-2025-clean ===
+# 4KiB WS2025 -- universal patch required (Issue 4)
+
+Database: C:\dev\aapf-validation\samples\resource\2025\clean\SRUDB.dat
 Tables:   12
+
+Name                              Records
+------------------------------------------
 MSysObjects                           165
 MSysObjectsShadow                     165
 MSysObjids                             28
 MSysLocales                             7
 SruDbIdMapTable                       159
 SruDbCheckpointTable                    0
+{17F4D97B-F26A-5E79-3A82-90040A47D13D}        143
+{841A7317-3805-518B-C2EA-AD224CB4AF84}         71
+{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}       2275
+{DC3D3B50-BB90-5066-FA4E-A5F90DD8B677}         36
+{DD6636C4-8929-4683-974E-22C046A43763}         36
+{EEE2F477-0659-5C47-EF03-6D6BEFD441B3}         36
 
-# Resource / WS2025 / Partial (4KiB)
-Database: samples\resource\2025\partial\SRUDB.dat
+# === resource-2025-partial ===
+# 4KiB WS2025 -- partial
+
+Database: C:\dev\aapf-validation\samples\resource\2025\partial\SRUDB.dat
 Tables:   12
+
+Name                              Records
+------------------------------------------
 MSysObjects                           165
 MSysObjectsShadow                     165
 MSysObjids                             28
 MSysLocales                             7
 SruDbIdMapTable                       156
 SruDbCheckpointTable                    0
+{17F4D97B-F26A-5E79-3A82-90040A47D13D}         47
+{841A7317-3805-518B-C2EA-AD224CB4AF84}         23
+{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}        835
+{DC3D3B50-BB90-5066-FA4E-A5F90DD8B677}         12
+{DD6636C4-8929-4683-974E-22C046A43763}         12
+{EEE2F477-0659-5C47-EF03-6D6BEFD441B3}         12
+
+# === Zeroed-page distribution summary (R4 Section4.4 evidence) ===
+# Format: <sample>  <page_size>  <total_pages>  <zeroed>  <ratio>
+
+# identity-2019-clean            8K       6400    772    12.1%
+# identity-2019-crashed          8K       6400    772    12.1%
+# identity-2019-locked           8K       6400    772    12.1%
+# identity-2025-clean            32K      2304    649    28.2%
+# identity-2025-crashed          32K      2304    649    28.2%
+# identity-2025-locked           32K      2304    649    28.2%
+# health-2019-clean              16K      1376    185    13.4%
+# health-2019-crashed            16K      1408    160    11.4%
+# health-2019-locked             16K      1376    185    13.4%
+# health-2025-clean              16K      1072    179    16.7%
+# health-2025-crashed            16K      1072    179    16.7%
+# health-2025-locked             16K      1072    180    16.8%
+# activity-2019-clean            32K       816    784    96.1%
+# activity-2019-crashed          32K       816    784    96.1%
+# activity-2019-locked           32K       816    784    96.1%
+# resource-2019-clean            4K        304    111    36.5%
+# resource-2019-partial          4K        192     75    39.1%
+# resource-2025-clean            4K        288     90    31.2%
+# resource-2025-partial          4K        224    104    46.4%

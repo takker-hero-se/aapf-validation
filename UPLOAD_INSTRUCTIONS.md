@@ -77,7 +77,7 @@ The web form will ask for fields that match `.zenodo.json`. Fill them as follows
 | Title | AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025 |
 | Publication date | 2026-06-14 |
 | Resource type | Dataset |
-| Creators | Hirose, Takayuki (Independent Researcher); Koide, Hiroshi (Kyushu University) |
+| Creators | Hirose, Takayuki (Independent Researcher) |
 | Description | Copy from `README.md` opening paragraphs |
 | Keywords | digital forensics; Windows Server 2025; Extensible Storage Engine; ESE; NTDS.dit; DataStore.edb; SRUDB.dat; WebCacheV01.dat; libesedb; tool validation; cross-page-size format change; itagState; ISO/IEC 27042; AAPF |
 | License | Creative Commons Attribution 4.0 International (CC-BY-4.0) |

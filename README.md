@@ -1,9 +1,9 @@
 # AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20789636.svg)](https://doi.org/10.5281/zenodo.20789636)
 [![License: LGPL-3.0](https://img.shields.io/badge/License-LGPL--3.0-blue.svg)](LICENSE.md)
 [![Patches: 7](https://img.shields.io/badge/patches-7-success.svg)](patches/)
-[![AAPF samples: 14](https://img.shields.io/badge/samples-14%20acquisitions-informational.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![AAPF samples: 14](https://img.shields.io/badge/samples-14%20acquisitions-informational.svg)](https://doi.org/10.5281/zenodo.20789636)
 
 **Companion artifacts** for the paper *"Silent Evidence Loss in Windows Server 2025: Cross-Page-Size ESE Format Changes and Their Forensic Integrity Implications"* (Forensic Science International: Digital Investigation, 2026).
 
@@ -101,7 +101,7 @@ If you use this dataset, please cite both the paper and the dataset.
 
 For the dataset, use the BibTeX in `CITATION.cff` or simply:
 
-> Hirose, T., & Koide, H. (2026). *AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.XXXXXXX
+> Hirose, T. (2026). *AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.20789636
 
 For the paper, see `docs/PAPER.md`.
 
@@ -131,7 +131,6 @@ See `ETHICAL_USE.md` for the full statement.
 ## Authors and contact
 
 - **Takayuki Hirose** — Independent Researcher
-- **Hiroshi Koide** — Cybersecurity Information Systems Research Division, Research Institute for Information Technology, Kyushu University
 
 Corresponding author: Takayuki Hirose, `takker0708@gmail.com`
 
