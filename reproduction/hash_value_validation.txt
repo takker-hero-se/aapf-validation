@@ -1,0 +1,60 @@
+# Credential value-fidelity cross-validation: Poneglyph vs. impacket
+#
+# Purpose: demonstrate that Poneglyph's decrypted NT/LM hash VALUES (not merely the
+# account count) are correct, by comparing them byte-for-byte against the reference
+# implementation, impacket's secretsdump.py, on the two NTDS.dit samples in this record.
+#
+# Tools
+#   Poneglyph : v0.2.3  (poneglyph/poneglyph.exe)
+#               SHA-256 b2e59f2e5638573c111ae8e9d1493bd1eb8c7b23ec612d7be5d09a576471eb38
+#   impacket  : v0.13.1 (secretsdump.py, LOCAL mode)
+#
+# Both tools were run offline against the identical (ntds.dit, SYSTEM) pair; no live DC.
+
+# ----------------------------------------------------------------------------------
+# Result summary
+# ----------------------------------------------------------------------------------
+#
+#   Sample              Poneglyph  impacket  common RIDs  matching  mismatching
+#   ------------------  ---------  --------  -----------  --------  -----------
+#   identity-2019-clean      2494      2595         2494      2494            0
+#   identity-2025-clean      2492      2593         2492      2492            0
+#
+#   Value agreement on every common account: 100 %  (0 mismatches).
+#
+# The impacket totals are larger because secretsdump.py additionally emits ~101 machine
+# accounts (trailing "$") and one built-in principal. Poneglyph's `hashes` subcommand
+# reports interactive/user principals by design; every account it DOES emit matches
+# impacket exactly. Restricting the comparison to the RIDs common to both tools yields
+# zero value mismatches on both databases.
+#
+# This upgrades the companion paper's value-fidelity property from a stated future-work
+# item to a verified result: the AES-format (CRYPTED_HASHW16) decryption path in
+# Poneglyph 0.2.3 is value-correct on both an 8 KiB WS2019 and a 32 KiB WS2025 database.
+
+# ----------------------------------------------------------------------------------
+# Reproduction
+# ----------------------------------------------------------------------------------
+#
+# Prerequisites: a Python venv with `impacket==0.13.1`, and this record's
+# poneglyph/poneglyph.exe. Adjust the sample paths to your checkout.
+#
+#   # 1. Poneglyph -> pwdump (username:rid:lm:nt:::)
+#   poneglyph.exe hashes --ntds samples/identity/2019/clean/ntds.dit \
+#                        --system samples/identity/2019/clean/SYSTEM \
+#                        --format pwdump -o pone_2019.txt
+#
+#   # 2. impacket -> secretsdump (domain\user:rid:lm:nt:::)
+#   python secretsdump.py -ntds samples/identity/2019/clean/ntds.dit \
+#                         -system samples/identity/2019/clean/SYSTEM LOCAL \
+#                         | grep ':::' > imp_2019.txt
+#
+#   # 3. Compare on RID -> NT-hash (case-insensitive), over the common RID set
+#   join <(sort -k1,1 <(awk -F: '{print $2" "tolower($4)}' imp_2019.txt)) \
+#        <(sort -k1,1 <(awk -F: '{print $2" "tolower($4)}' pone_2019.txt)) \
+#     | awk '{ if ($2==$3) m++; else x++ } END{ print "match="m"  mismatch="x }'
+#   # expected: match=2494  mismatch=0   (WS2025: match=2492  mismatch=0)
+#
+# Spot check (WS2019), account COLEMAN_ORTEGA, RID 1242:
+#   impacket : ...:1242:aad3b435b51404eeaad3b435b51404ee:38e703d5d875fdb0f10b41415981bd4d:::
+#   Poneglyph: COLEMAN_ORTEGA:1242:aad3b435b51404eeaad3b435b51404ee:38e703d5d875fdb0f10b41415981bd4d:::

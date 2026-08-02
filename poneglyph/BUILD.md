@@ -28,7 +28,7 @@ Verify by running `cargo metadata` and confirming that `libesedb-sys` resolves t
 
 ## Step 2 — Poneglyph source
 
-Clone Poneglyph from https://github.com/takker-hero-se/Poneglyph . Reference release: v0.2.1.
+Clone Poneglyph from https://github.com/takker-hero-se/Poneglyph . Reference release: v0.2.3.
 
 ## Step 3 — Build
 

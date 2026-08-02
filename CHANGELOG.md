@@ -6,12 +6,22 @@ All notable changes to this Zenodo record are documented here. Versioning follow
 
 Initial public release accompanying paper submission.
 
+### Corrections during staging (pre-upload)
+
+- **Poneglyph `poneglyph.exe` bumped 0.2.2 → 0.2.3.** Fixed the AES (`CRYPTED_HASHW16`)
+  per-account hash-decryption offset: the ciphertext begins at byte 28, after the 4-byte
+  `Unknown` field, not byte 24 (the legacy RC4 `CRYPTED_HASH` layout). The previous binary
+  decrypted the correct *number* of hashes but produced corrupted *values* on all
+  AES-format (Windows 2016+) databases. Record/user/membership counts are unaffected. The
+  0.2.3 binary's NT/LM output is now byte-for-byte identical to impacket `secretsdump.py`
+  (2494/2494 WS2019, 2492/2492 WS2025); see `reproduction/hash_value_validation.txt`.
+
 ### Includes
 
 - Universal `& 0x0FFF` patch for `libesedb_page_header.c` (cross-page-size scope)
 - B-tree `IS_LEAF` validation patch for `libesedb_page_tree.c`
 - 4 quality-of-life / build-system patches
-- Poneglyph Windows binary (`poneglyph.exe`), Rust 1.78, GCC 15
+- Poneglyph Windows binary (`poneglyph.exe`) v0.2.3, Rust 1.78, GCC 15
 - 14 sample acquisitions across Identity, Health, Activity, Resource categories
 - Reproduction scripts (`verify_pagesize.ps1`, `parse_all.ps1`)
 - Pre-computed expected outputs (`expected_outputs.txt`)

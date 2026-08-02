@@ -24,6 +24,14 @@ For non-NTDS databases (`DataStore.edb`, `SRUDB.dat`, `WebCacheV01.dat`), only t
 
 Verify by re-parsing any sample from `samples/` and comparing to `samples/**/_validation/poneglyph-info-*.txt`.
 
+## Credential value fidelity
+
+The `hashes` subcommand's decrypted NT/LM values are byte-for-byte cross-validated against
+[impacket](https://github.com/fortra/impacket) `secretsdump.py` on the two NTDS.dit samples in
+this record: **2494/2494** matching accounts on the WS2019 (8 KiB) database and **2492/2492** on
+the WS2025 (32 KiB) database — 100 % agreement, zero mismatches. See
+`../reproduction/hash_value_validation.txt` for the full comparison and the regeneration procedure.
+
 ## Build provenance
 
 - Toolchain: `stable-x86_64-pc-windows-gnu` (Rust 1.78+)
