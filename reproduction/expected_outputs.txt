@@ -127,8 +127,7 @@ quota_rebuild_progress_table            1
 hiddentable_optft                       4
 
 # === identity-2025-locked ===
-# 32KiB WS2025 Dirty (VSS) -- parses fully (15/15) in this acquisition. An earlier, separate
-# acquisition showed a non-reproduced partial parse (10 of 15); see Section 8.5.3.
+# 32KiB WS2025 Dirty (VSS) -- parses fully (15 tables, datatable 7030) with the revision-gated patch; State-Resilience discussion in Section8.5.3.
 
 Database: C:\dev\aapf-validation\samples\identity\2025\locked\ntds.dit
 Tables:   15

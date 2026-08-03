@@ -18,7 +18,7 @@ $Samples = @(
     @{ Cat='identity'; OS='2019'; State='locked';  Note='8KiB WS2019 Dirty Shutdown (VSS) -- parses fully, contrast with 32KiB' },
     @{ Cat='identity'; OS='2025'; State='clean';   Note='32KiB WS2025 -- universal patch required for catalog read' },
     @{ Cat='identity'; OS='2025'; State='crashed'; Note='32KiB WS2025 -- Stop-Service produces Clean Shutdown; identical to Clean (R2-W3 rebuttal)' },
-    @{ Cat='identity'; OS='2025'; State='locked';  Note='32KiB WS2025 Dirty (VSS) -- PARTIAL: 10 of 15 tables (catalog metadata + datatable missing). See Section8.5.3.' },
+    @{ Cat='identity'; OS='2025'; State='locked';  Note='32KiB WS2025 Dirty (VSS) -- parses fully (15 tables, datatable 7030) with the revision-gated patch; State-Resilience discussion in Section8.5.3.' },
 
     @{ Cat='health';   OS='2019'; State='clean';   Note='16KiB WS2019' },
     @{ Cat='health';   OS='2019'; State='crashed'; Note='16KiB WS2019 -- extra log files captured; same parse' },
