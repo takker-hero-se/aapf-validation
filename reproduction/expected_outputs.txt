@@ -552,6 +552,75 @@ SruDbCheckpointTable                    0
 {DD6636C4-8929-4683-974E-22C046A43763}         12
 {EEE2F477-0659-5C47-EF03-6D6BEFD441B3}         12
 
+# === health-w11-25h2-clean ===
+# 16KiB CLIENT Windows 11 24H2+ (build 26200 / 25H2), synthetic (win11-ese) -- revision 0x012C, same as WS2025; not server-only
+
+Database: C:\dev\aapf-validation\samples\health\w11-25h2\clean\DataStore.edb
+Tables:   36
+
+Name                              Records
+------------------------------------------
+MSysObjects                           657
+MSysObjectsShadow                     657
+MSysObjids                             80
+MSysLocales                             8
+tbAUState                               0
+tbCcrDownloadData                       0
+tbComputerInfo                          0
+tbDownloadJob                           0
+tbEula                                  0
+tbEulaMap                               0
+tbFiles                             14286
+tbHistory                               4
+tbServerConfig                          3
+tbServerCookies                        91
+tbServiceData                           5
+tbScanTransInfo                         3
+tbStoreVersion                          1
+tbUpdateLocalizedProps                972
+tbUpdates                            2129
+tbHiddenUpdates                         0
+tbLocalUserIds                          2
+tbTimers                                2
+tbSLSData                               4
+tbPerSessionDLData                     18
+tbSignedTimestamps                     15
+tbMergedUpdates                         0
+tbPerSrvUpdate9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUserUpdateData9116a23d9de3a64d8a4bb43877bcb1b7          0
+tbPerSrvUpdateb4f4829443e3b643b1709a65bc822c77       1288
+tbPerSrvUserUpdateDatab4f4829443e3b643b1709a65bc822c77          0
+tbPerSrvUpdate18f9717947a8304492794a52d1efe18d          0
+tbPerSrvUserUpdateData18f9717947a8304492794a52d1efe18d          0
+tbPerSrvUpdate7c8a5e85b4eca34cb0451dfa50104289        835
+tbPerSrvUserUpdateData7c8a5e85b4eca34cb0451dfa50104289          0
+tbPerSrvUpdate27b0248bee1dbbba9a953517dfb9c552         93
+tbPerSrvUserUpdateData27b0248bee1dbbba9a953517dfb9c552          0
+
+# === resource-w11-25h2-clean ===
+# 4KiB CLIENT Windows 11 24H2+ (build 26200 / 25H2), synthetic (win11-ese) -- revision 0x012C; Impacket v0.13.1 fails, revision-gated libesedb recovers 15 tables
+
+Database: C:\dev\aapf-validation\samples\resource\w11-25h2\clean\SRUDB.dat
+Tables:   15
+
+Name                              Records
+------------------------------------------
+MSysObjects                           260
+MSysObjectsShadow                     260
+MSysObjids                             38
+MSysLocales                             7
+SruDbIdMapTable                       987
+SruDbCheckpointTable                    0
+{DA73FB89-2BEA-4DDC-86B8-6E048C6DA477}       3717
+{5C8CF1C7-7257-4F13-B223-970EF5939312}       3514
+{7ACBBAA3-D029-4BE4-9A7A-0885927F1D8F}         33
+{973F5D5C-1D90-4944-BE8E-24B94231A174}        253
+{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}       1050
+{DD6636C4-8929-4683-974E-22C046A43763}         15
+{FEE4E14F-02A9-4550-B5CE-5FA2DA202E37}         27
+{B6D82AF1-F780-4E17-8077-6CB9AD8A6FC4}          2
+{FEE4E14F-02A9-4550-B5CE-5FA2DA202E37}LT          0
+
 # === Zeroed-page distribution summary (R4 Section4.4 evidence) ===
 # Format: <sample>  <page_size>  <total_pages>  <zeroed>  <ratio>
 
@@ -574,3 +643,5 @@ SruDbCheckpointTable                    0
 # resource-2019-partial          4K        192     75    39.1%
 # resource-2025-clean            4K        288     90    31.2%
 # resource-2025-partial          4K        224    104    46.4%
+# health-w11-25h2-clean          16K      1136    167    14.7%
+# resource-w11-25h2-clean        4K        912    177    19.4%

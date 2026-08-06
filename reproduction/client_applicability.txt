@@ -1,0 +1,58 @@
+# Client-side applicability: the WS2025 ESE format change is not server-only
+#
+# Purpose: demonstrate, on a reproducible SYNTHETIC Windows 11 client, that the
+# ESE format-revision change (0x012C) and the resulting itagState parsing
+# failure are present on client Windows -- not only Windows Server 2025.
+#
+# The samples below were generated on a synthetic Windows 11 24H2+ lab client
+# (OS build 26200.8875 / "25H2") produced by the exGOAD `win11-ese` extension.
+# All activity that populated the databases is synthetic (a lab VM with no real
+# user), so these databases are safe to redistribute -- unlike a real analyst's
+# SRUM, which contains genuine user-activity data.
+#
+#   Guest : Windows 11, build 26200.8875 (25H2), synthetic (exGOAD win11-ese)
+#   Tools : Impacket v0.13.1 (secretsdump/ese), poneglyph v0.2.3 (patched libesedb)
+
+# ----------------------------------------------------------------------------
+# Result
+# ----------------------------------------------------------------------------
+#
+#   Sample (category/os/state)          Page   Revision   Impacket v0.13.1   poneglyph 0.2.3
+#   ----------------------------------  -----  ---------  -----------------  ----------------
+#   resource/w11-25h2/clean  SRUDB.dat  4 KiB  0x012C     PARSE_FAIL         15 tables  (OK)
+#   health/w11-25h2/clean    DataStore  16 KiB 0x012C     36 tables (OK)     36 tables  (OK)
+#
+# The 4 KiB SRUDB.dat is the decisive case: the LATEST Impacket release
+# (v0.13.1) still aborts on it -- its page-size gate (page_size > 8192) does not
+# cover 4 KiB -- with the same itagState-driven error seen on the Windows
+# Server 2025 SRUDB.dat sample:
+#
+#   PARSE_FAIL: error: unpack requires a buffer of 2 bytes
+#
+# The revision-gated libesedb (poneglyph 0.2.3) recovers all 15 tables. The
+# 16 KiB DataStore.edb opens under Impacket v0.13.1 only because 16384 > 8192
+# satisfies its gate; it is included here to document that the client database
+# is at the same format revision (0x012C).
+#
+# Header confirmation (esentutl /mh):
+#   SRUDB.dat     : Format ulVersion 0x620,300 (revision 0x012C), cbDbPage 4096
+#   DataStore.edb : Format ulVersion 0x620,300 (revision 0x012C), cbDbPage 16384
+#
+# This upgrades the paper's client-side applicability from an observation on a
+# single real analyst workstation (whose SRUM cannot be redistributed) to a
+# reproducible, deposited result.
+
+# ----------------------------------------------------------------------------
+# Reproduction
+# ----------------------------------------------------------------------------
+#
+#   # 4 KiB client SRUM: latest Impacket fails, patched libesedb succeeds
+#   python -c "from impacket.ese import ESENT_DB; ESENT_DB(r'samples\resource\w11-25h2\clean\SRUDB.dat')"
+#     -> unpack requires a buffer of 2 bytes
+#   poneglyph.exe info --ntds samples\resource\w11-25h2\clean\SRUDB.dat
+#     -> Tables: 15
+#
+# To regenerate the samples from scratch, deploy the exGOAD `win11-ese`
+# extension on a Windows 11 build >= 26100 (24H2) guest (the extension's
+# verify_build.ps1 enforces the build gate), populate with synthetic activity,
+# and snapshot with snapshot_ese.ps1 (targets: srum, datastore).
