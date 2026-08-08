@@ -21,6 +21,13 @@
 #   ----------------------------------  -----  ---------  -----------------  ----------------
 #   resource/w11-25h2/clean  SRUDB.dat  4 KiB  0x012C     PARSE_FAIL         15 tables  (OK)
 #   health/w11-25h2/clean    DataStore  16 KiB 0x012C     36 tables (OK)     36 tables  (OK)
+#   activity/w11-25h2/clean  WebCache   32 KiB 0x012C     28 tables (OK)     28 tables  (OK)
+#
+# All three page sizes (4/16/32 KiB) are present on this single synthetic
+# Windows 11 client, and all three carry format revision 0x012C -- the same
+# cross-page-size spectrum documented on Windows Server 2025. (The 32 KiB
+# WebCacheV01.dat is captured Dirty by nature: WebCache cannot be cleanly
+# stopped; it still parses and its revision is unambiguous.)
 #
 # The 4 KiB SRUDB.dat is the decisive case: the LATEST Impacket release
 # (v0.13.1) still aborts on it -- its page-size gate (page_size > 8192) does not

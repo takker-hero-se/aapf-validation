@@ -37,7 +37,8 @@ $Samples = @(
     @{ Cat='resource'; OS='2025'; State='partial'; Note='4KiB WS2025 -- partial' },
 
     @{ Cat='health';   OS='w11-25h2'; State='clean'; Note='16KiB CLIENT Windows 11 24H2+ (build 26200 / 25H2), synthetic (win11-ese) -- revision 0x012C, same as WS2025; not server-only' },
-    @{ Cat='resource'; OS='w11-25h2'; State='clean'; Note='4KiB CLIENT Windows 11 24H2+ (build 26200 / 25H2), synthetic (win11-ese) -- revision 0x012C; Impacket v0.13.1 fails, revision-gated libesedb recovers 15 tables' }
+    @{ Cat='resource'; OS='w11-25h2'; State='clean'; Note='4KiB CLIENT Windows 11 24H2+ (build 26200 / 25H2), synthetic (win11-ese) -- revision 0x012C; Impacket v0.13.1 fails, revision-gated libesedb recovers 15 tables' },
+    @{ Cat='activity'; OS='w11-25h2'; State='clean'; Note='32KiB CLIENT Windows 11 24H2+ (build 26200 / 25H2), synthetic (win11-ese) -- revision 0x012C; completes the 4/16/32 KiB client spectrum (WebCache is dirty-shutdown by nature)' }
 )
 
 $out = New-Object 'System.Collections.Generic.List[string]'

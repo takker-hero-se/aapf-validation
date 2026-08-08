@@ -621,6 +621,43 @@ SruDbCheckpointTable                    0
 {B6D82AF1-F780-4E17-8077-6CB9AD8A6FC4}          2
 {FEE4E14F-02A9-4550-B5CE-5FA2DA202E37}LT          0
 
+# === activity-w11-25h2-clean ===
+# 32KiB CLIENT Windows 11 24H2+ (build 26200 / 25H2), synthetic (win11-ese) -- revision 0x012C; completes the 4/16/32 KiB client spectrum (WebCache is dirty-shutdown by nature)
+
+Database: C:\dev\aapf-validation\samples\activity\w11-25h2\clean\WebCacheV01.dat
+Tables:   28
+
+Name                              Records
+------------------------------------------
+MSysObjects                           497
+MSysObjectsShadow                     497
+MSysObjids                             53
+MSysLocales                             8
+Containers                              8
+Container_1                             2
+Container_2                            17
+PartitionsEx                           13
+BlobEntry_1                            13
+CookieEntryEx_2                         6
+BlobEntry_3                             4
+CookieEntryEx_4                         0
+BlobEntry_5                             2
+Container_3                             1
+CookieEntryEx_6                         0
+Container_7                             2
+BlobEntry_7                             1
+Container_8                             0
+CookieEntryEx_8                         0
+BlobEntry_9                             4
+Container_9                             0
+CookieEntryEx_10                        0
+Container_10                           16
+HstsEntryEx_11                          2
+BlobEntry_12                            3
+Container_11                            4
+CookieEntryEx_13                        8
+LeakFiles                               0
+
 # === Zeroed-page distribution summary (R4 Section4.4 evidence) ===
 # Format: <sample>  <page_size>  <total_pages>  <zeroed>  <ratio>
 
@@ -645,3 +682,4 @@ SruDbCheckpointTable                    0
 # resource-2025-partial          4K        224    104    46.4%
 # health-w11-25h2-clean          16K      1136    167    14.7%
 # resource-w11-25h2-clean        4K        912    177    19.4%
+# activity-w11-25h2-clean        32K       816    719    88.1%
