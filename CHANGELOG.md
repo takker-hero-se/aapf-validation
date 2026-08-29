@@ -15,6 +15,12 @@ Initial public release accompanying paper submission.
   AES-format (Windows 2016+) databases. Record/user/membership counts are unaffected. The
   0.2.3 binary's NT/LM output is now byte-for-byte identical to impacket `secretsdump.py`
   (2494/2494 WS2019, 2492/2492 WS2025); see `reproduction/hash_value_validation.txt`.
+- **Upstream `libesedb` adopted the revision-gated fix.** After the defect was reported
+  (issue #78, PR #79), the `libesedb` maintainer incorporated an equivalent
+  format-revision-gated fix (`format_revision >= 0x0122`, commit `768a0474`) and released it
+  in **release 20260704** (2026-07-04). These patches reproduce the paper's pinned
+  `libesedb-sys` 0.2.1 build; on current upstream the equivalent fix is already present.
+  Page-size-gated tools (Impacket, `dissect.esedb`) still miss the 4 KiB case.
 
 ### Includes
 

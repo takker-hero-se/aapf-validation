@@ -85,7 +85,7 @@ A pre-computed `expected_outputs.txt` is included so reviewers can verify their 
 
 ## Notable findings reproducible from this record
 
-1. **Universal patch validation** — applying `patches/fix-ws2025-itag-state.patch` unconditionally (without a `page_size >= 32768` gate) resolves WS2025 16 KiB `DataStore.edb` and 4 KiB `SRUDB.dat` parsing failures that prior community fixes (e.g., dissect.esedb PR #46) leave unaddressed.
+1. **Format-revision-gated patch validation** — applying the `itagState` mask gated on the ESE format revision (`>= 0x0122`, not on a `page_size >= 32768` gate) resolves WS2025 16 KiB `DataStore.edb` and 4 KiB `SRUDB.dat` parsing failures that page-size-gated community fixes (e.g., dissect.esedb PR #46, Impacket) leave unaddressed. After we reported the defect, upstream `libesedb` incorporated an equivalent revision-gated fix in **release 20260704** (commit `768a0474`); these patches reproduce the paper's pinned build.
 
 2. **Cross-page-size scope of the `itagState` reinterpretation** — the upper 4 bits of `itagState` (`ctagReserved`) are observed to be `0x0` on every WS2019 sample in the record and `0x1` on every WS2025 sample inspected, across 4 KiB, 16 KiB, and 32 KiB pages alike. The format change is *not* page-size-induced; it is OS-version-induced. It is also *not* server-only: a synthetic Windows 11 24H2+ client (`samples/resource/w11-25h2`, `samples/health/w11-25h2`) carries the identical format revision `0x012C`, and the latest Impacket (v0.13.1) still fails on its 4 KiB `SRUDB.dat` while the revision-gated `libesedb` recovers all 15 tables (`reproduction/client_applicability.txt`).
 
