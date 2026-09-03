@@ -1,0 +1,64 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+# AAPF verification sandbox (Windows, VMware Desktop).
+#
+# Root cause of earlier WinRM boot timeouts: the host's "VMware NAT Service"
+# (vmnat.exe) crashes on start because Hyper-V/WSL2's network stack already
+# holds UDP 53, so vmnat's NAT-DNS bind fails. Without NAT there is no port
+# forwarding, and Vagrant's 127.0.0.1:5598x WinRM route is dead.
+#
+# Fix (non-destructive; no admin, no disabling Hyper-V/WSL2): disable Vagrant's
+# NAT port-forwards so it connects to the guest's REAL IP directly (reachable:
+# guest 5985/3389 were confirmed open via the guest IP), and add a hostOnly
+# DHCP adapter as an extra direct route that does not depend on the NAT service.
+
+Vagrant.configure("2") do |config|
+  ENV['VAGRANT_DEFAULT_PROVIDER'] = 'vmware_desktop'
+
+  config.vm.box          = "gusztavvargadr/windows-server-2022-standard"
+  config.vm.guest        = :windows
+  config.vm.communicator = "winrm"
+  config.winrm.username  = "vagrant"
+  config.winrm.password  = "vagrant"
+  config.winrm.retry_limit = 30
+  config.winrm.retry_delay = 10
+  config.vm.boot_timeout   = 900
+
+  # --- Disable NAT port-forwards -> Vagrant uses the guest's real IP directly --
+  config.vm.network "forwarded_port", id: "winrm",     guest: 5985, host: 55985, disabled: true
+  config.vm.network "forwarded_port", id: "winrm-ssl", guest: 5986, host: 55986, disabled: true
+  config.vm.network "forwarded_port", id: "rdp",       guest: 3389, host: 3389,  disabled: true
+  # hostOnly adapter with DHCP: a reliable direct route that needs no NAT service
+  config.vm.network "private_network", type: "dhcp"
+
+  # --- Synced folders (VMware HGFS; independent of the NAT service) -----------
+  # "../.." is the extracted Zenodo/repo root (it must contain samples/ and
+  # poneglyph/poneglyph.exe). Vagrant resolves this relative to THIS Vagrantfile,
+  # so no host-specific path edit is needed when run from reproduction/sandbox/.
+  config.vm.synced_folder "../..", "C:\\aapf"                    # corpus + poneglyph.exe
+  config.vm.synced_folder "./output", "C:\\out", create: true    # results (video/log) back to host
+
+  # --- Provider --------------------------------------------------------------
+  config.vm.provider "vmware_desktop" do |v|
+    v.force_vmware_license = "workstation"   # exGOAD: fixes a vagrant plugin issue
+    v.gui = true                             # visible console for screen recording
+    v.vmx["memsize"]  = "4096"
+    v.vmx["numvcpus"] = "2"
+  end
+
+  # --- Our sandbox provisioning ---------------------------------------------
+  config.vm.provision "file",  source: "scripts", destination: "C:/scripts"
+  config.vm.provision "shell", path: "scripts/provision.ps1"
+  config.vm.provision "shell", reboot: true,
+    inline: "Write-Host 'Rebooting into the recorded verification run...'"
+
+  config.vm.post_up_message = <<-MSG
+  ============================================================
+  Sandbox up (direct-IP WinRM, NAT port-forward disabled) and
+  rebooting into the recorded verification.
+  Results appear on the HOST in ./output/ :
+      verification-<timestamp>.mp4 / .log  and  DONE.txt
+  ============================================================
+  MSG
+end
