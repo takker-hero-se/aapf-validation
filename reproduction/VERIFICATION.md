@@ -9,7 +9,7 @@ Where [`REPRODUCE.md`](REPRODUCE.md) tells a reviewer **how** to reproduce each
 result by hand, this file is the **captured result** of doing so automatically:
 a single `vagrant up` builds a clean VM, runs the checks, and screen-records the
 run to video. Every check is a hard PASS/FAIL assertion against a pre-declared
-expected value; the run reproduced here yields **44 PASS / 0 FAIL**.
+expected value; the run reproduced here yields **52 PASS / 0 FAIL**.
 
 Everything below is regenerable from this record alone — see
 [Regenerating this evidence](#regenerating-this-evidence).
@@ -38,7 +38,8 @@ Everything below is regenerable from this record alone — see
 | [7] | 32 KiB page partition | **Figure 5** (data area vs "ghost tags") | 1/1 PASS |
 | [8] | Normal page vs fully-zeroed page hex | **Figure 3** (page comparison) + underpins **Figure 4** (B-tree leaf chain) | 2/2 PASS |
 | [9] | Client axis (`w11-25h2`): the 4/16/32 KiB spectrum on one client | §8.5 client applicability; the deposited synthetic Windows 11 samples | 12/12 PASS |
-| | **SUMMARY** | | **44 PASS / 0 FAIL** |
+| [10] | Credential value fidelity: Poneglyph vs Impacket, per RID | §8.3 value-fidelity cross-validation; `reproduction/hash_value_validation.txt` | 8/8 PASS |
+| | **SUMMARY** | | **52 PASS / 0 FAIL** |
 
 All values are read live from the deposited databases; none are hard-coded. In
 particular [6]–[8] derive `4106` vs `10`, the `16 384`-byte ghost region, and
@@ -64,7 +65,7 @@ partition, and the Figure 3 *normal* page dump.
 Figure 3's *normal* (`0x18000`) vs *fully-zeroed* (`0x98000`) page headers read
 from the real sample — the zeroed page's `page_flags = 0x0000` (`IS_LEAF` not
 set) is the exact condition behind the Figure 4 B-tree leaf-chain failure — and
-the `SUMMARY: PASS = 44  FAIL = 0` line, and the `Negative controls: 3/3` line below it.
+the `SUMMARY: PASS = 52  FAIL = 0` line, and the `Negative controls: 3/3` line below it.
 
 ![Page hex comparison and summary](verification-evidence/03-page-hex-and-summary-32pass.png)
 
