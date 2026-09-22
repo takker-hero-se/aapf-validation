@@ -3,32 +3,64 @@
 #
 # AAPF verification sandbox (Windows, VMware Desktop).
 #
-# Root cause of earlier WinRM boot timeouts: the host's "VMware NAT Service"
-# (vmnat.exe) crashes on start because Hyper-V/WSL2's network stack already
-# holds UDP 53, so vmnat's NAT-DNS bind fails. Without NAT there is no port
-# forwarding, and Vagrant's 127.0.0.1:5598x WinRM route is dead.
+# --- WinRM note -------------------------------------------------------------
+# Earlier boot timeouts were blamed on the host's "VMware NAT Service"
+# (vmnat.exe) failing its NAT-DNS bind when Hyper-V/WSL2 already holds UDP 53,
+# and were "fixed" by disabling Vagrant's NAT port-forwards outright. That was
+# wrong, and the forwarded_port block below now carries the measured answer:
+# the forwards stay ENABLED on non-default host ports. See that block.
 #
-# Fix (non-destructive; no admin, no disabling Hyper-V/WSL2): disable Vagrant's
-# NAT port-forwards so it connects to the guest's REAL IP directly (reachable:
-# guest 5985/3389 were confirmed open via the guest IP), and add a hostOnly
-# DHCP adapter as an extra direct route that does not depend on the NAT service.
+# --- Where the VM's disks live ----------------------------------------------
+# Vagrant puts a cloned VM's disks in .vagrant/ next to this file -- several GB.
+# If you extracted this sandbox inside a synced folder (OneDrive, Dropbox), the
+# sync client will try to upload them while the VM runs. Point the state
+# directory somewhere local first, for EVERY invocation in the session:
+#     $env:VAGRANT_DOTFILE_PATH = "C:\vagrant-state\aapf-verify"
+# A hostOnly DHCP adapter is declared either way, as a direct route that does
+# not depend on the NAT service.
 
 Vagrant.configure("2") do |config|
   ENV['VAGRANT_DEFAULT_PROVIDER'] = 'vmware_desktop'
 
   config.vm.box          = "gusztavvargadr/windows-server-2022-standard"
+  # PINNED: this sandbox's 32 assertions were measured on this image. Unpinned,
+  # Vagrant takes whatever is current and the evidence stops being replayable.
+  config.vm.box_version  = ENV['WS2022_BOX_VERSION'] || "2607.0.0"
   config.vm.guest        = :windows
   config.vm.communicator = "winrm"
   config.winrm.username  = "vagrant"
   config.winrm.password  = "vagrant"
   config.winrm.retry_limit = 30
   config.winrm.retry_delay = 10
-  config.vm.boot_timeout   = 900
+  # 30 min, not 15: on a memory-constrained host this guest boots slowly, and a
+  # boot that is merely slow is indistinguishable from a WinRM fault from here.
+  # Two runs were lost to the 15-minute limit before this was raised; the
+  # generation sandbox had already made the same change for the same reason.
+  config.vm.boot_timeout   = 1800
 
-  # --- Disable NAT port-forwards -> Vagrant uses the guest's real IP directly --
-  config.vm.network "forwarded_port", id: "winrm",     guest: 5985, host: 55985, disabled: true
-  config.vm.network "forwarded_port", id: "winrm-ssl", guest: 5986, host: 55986, disabled: true
-  config.vm.network "forwarded_port", id: "rdp",       guest: 3389, host: 3389,  disabled: true
+  # --- NAT port-forwards: ENABLED, on non-default host ports -------------------
+  # This is the only configuration measured to work on this host, and the
+  # reasoning is not obvious, so: Vagrant derives the WinRM endpoint from the
+  # forwarded_port declaration. Declaring it `disabled: true` does NOT make
+  # Vagrant fall back to the guest address -- it still announces
+  # 127.0.0.1:<host>, now pointing at a forward nobody created, and the boot
+  # times out. Leaving the forward ENABLED but on a NON-DEFAULT host port makes
+  # Vagrant use the guest's hostOnly address instead, which answers.
+  #
+  # Keeping Vagrant's default 55985 also fails: vmnat accepts the TCP connection
+  # but never relays it, so the port tests "reachable" while a real request to
+  # /wsman times out. Check with an actual HTTP request, never Test-NetConnection.
+  #
+  # The two sandboxes must not share host ports either: Vagrant only
+  # auto-corrects collisions within one environment, so vmnat ends up forwarding
+  # to whichever guest registered last.
+  #     verification sandbox : 55975 / 55976 / 53385
+  #     generation sandbox   : 55995 / 55996 / 53390
+  # Set AAPF_NO_NAT=1 to drop the forwards entirely if vmnat is truly dead.
+  nat_broken = ENV['AAPF_NO_NAT'] == '1'
+  config.vm.network "forwarded_port", id: "winrm",     guest: 5985, host: 55975, disabled: nat_broken
+  config.vm.network "forwarded_port", id: "winrm-ssl", guest: 5986, host: 55976, disabled: nat_broken
+  config.vm.network "forwarded_port", id: "rdp",       guest: 3389, host: 53385, disabled: nat_broken
   # hostOnly adapter with DHCP: a reliable direct route that needs no NAT service
   config.vm.network "private_network", type: "dhcp"
 
@@ -36,14 +68,18 @@ Vagrant.configure("2") do |config|
   # "../.." is the extracted Zenodo/repo root (it must contain samples/ and
   # poneglyph/poneglyph.exe). Vagrant resolves this relative to THIS Vagrantfile,
   # so no host-specific path edit is needed when run from reproduction/sandbox/.
-  config.vm.synced_folder "../..", "C:\\aapf"                    # corpus + poneglyph.exe
+  # AAPF_CORPUS overrides it when the corpus lives somewhere else.
+  corpus = ENV['AAPF_CORPUS'] || '../..'
+  config.vm.synced_folder corpus, "C:\\aapf"                      # corpus + poneglyph.exe
   config.vm.synced_folder "./output", "C:\\out", create: true    # results (video/log) back to host
 
   # --- Provider --------------------------------------------------------------
   config.vm.provider "vmware_desktop" do |v|
     v.force_vmware_license = "workstation"   # exGOAD: fixes a vagrant plugin issue
     v.gui = true                             # visible console for screen recording
-    v.vmx["memsize"]  = "4096"
+    # AAPF_MEMSIZE lowers this on a host that cannot spare 4 GB. The default is
+    # what VERIFICATION.md assumes; only the env var deviates from it.
+    v.vmx["memsize"]  = ENV['AAPF_MEMSIZE'] || "4096"
     v.vmx["numvcpus"] = "2"
   end
 

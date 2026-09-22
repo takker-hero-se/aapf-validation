@@ -54,20 +54,19 @@ Table 1 and Table 5.
 
 ![Page sizes and counts](verification-evidence/01-page-sizes-and-counts.png)
 
-### 2 — `itagState`, Impacket, and Figures 2/3/5 (sections [3]–[8], top)
-`itagState` hex per artifact (all upper-nibble `ctagReserved = 0x1`), the Impacket
-v0.13.1 result, the Figure 2 bit-field interpretation, the Figure 5 page
-partition, and the Figure 3 *normal* page dump.
+### 2 — Figures 3/4/5: page partition and page hex (sections [7]–[8])
+The Figure 5 page partition (misread `N = 4106` against the correct `N = 10`) and
+the Figure 3 *normal* (`0x18000`) vs *fully-zeroed* (`0x98000`) page headers, read
+from the real sample.
 
-![itagState and figures 2/3/5](verification-evidence/02-itagstate-and-figures-2-3-5.png)
+![Figure 5 partition and page hex comparison](verification-evidence/02-figures-3-4-5-page-hex.png)
 
-### 3 — Page hex comparison and final summary (section [8] + SUMMARY)
-Figure 3's *normal* (`0x18000`) vs *fully-zeroed* (`0x98000`) page headers read
-from the real sample — the zeroed page's `page_flags = 0x0000` (`IS_LEAF` not
-set) is the exact condition behind the Figure 4 B-tree leaf-chain failure — and
-the `SUMMARY: PASS = 52  FAIL = 0` line, and the `Negative controls: 3/3` line below it.
+### 3 — Client axis, credential value fidelity, and final summary (sections [9]–[10] + SUMMARY)
+The 4/16/32 KiB client spectrum, the Poneglyph-vs-Impacket credential comparison
+(counts and mismatches only; no hash is printed), the `SUMMARY: PASS = 52  FAIL =
+0` line, and the `Negative controls: 3/3` line below it.
 
-![Page hex comparison and summary](verification-evidence/03-page-hex-and-summary-32pass.png)
+![Client axis, value fidelity, and summary](verification-evidence/03-client-axis-and-summary-52pass.png)
 
 ## Figure-to-hex correspondence (read from the deposited `ntds.dit`)
 
@@ -91,13 +90,16 @@ The illustrative page is page 4 (`0x18000 = 3 × 32768`) of
 
 ## Full text log
 
-The complete console transcript (all eight sections, UTF-16) is
-[`verification-evidence/verification-final-32pass.log`](verification-evidence/verification-final-32pass.log).
+The complete console transcript of the run recorded on 2026-09-20 (sections
+`[0]`–`[10]`, UTF-16) is
+[`verification-evidence/verification-final-52pass.log`](verification-evidence/verification-final-52pass.log).
+The console scrolls during the run, so the three frames above are excerpts: the
+`itagState` sections `[3]`, `[5]` and `[6]` are in the log and the video.
 
 ## Video
 
-The full screen recording of the run (`[1]`–`[8]` in a live console) is
-`verification-evidence/verification-final-32pass.mp4`. It is distributed with the
+The full screen recording of the run (`[0]`–`[10]` in a live console, 8 min 18 s) is
+`verification-evidence/verification-final-52pass.mp4`. It is distributed with the
 **Zenodo record only** (kept out of the Git repository for size); the three
 screenshots above are frames extracted from it.
 

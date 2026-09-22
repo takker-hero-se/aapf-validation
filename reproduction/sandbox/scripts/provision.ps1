@@ -1,4 +1,4 @@
-# provision.ps1 — runs once during `vagrant up` (WinRM, non-interactive).
+# provision.ps1 -- runs once during `vagrant up` (WinRM, non-interactive).
 # Installs Python + impacket + ffmpeg, enables auto-logon, and installs a
 # Startup launcher so the RECORDED verification runs on the next interactive
 # logon (triggered by `vagrant reload`).
@@ -6,26 +6,53 @@
 $ErrorActionPreference = "Stop"
 Write-Host "== AAPF sandbox provisioning =="
 
-# --- Chocolatey ------------------------------------------------------------
-if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-  Set-ExecutionPolicy Bypass -Scope Process -Force
-  [System.Net.ServicePointManager]::SecurityProtocol = 3072
-  Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+# --- Toolchain, from the vendored copy: no network during provisioning -----
+# ffmpeg, Python and Impacket used to come from Chocolatey and PyPI. That made
+# a recorded run depend on three external services staying up and unchanged,
+# and it failed outright whenever the host's VMware NAT service died and the
+# guest lost DNS. The vendored copy ships with the corpus; vendor/MANIFEST.txt
+# records each file's origin and SHA-256. The versions are exactly the ones the
+# recorded runs measured. Nothing here decides an assertion -- ffmpeg only
+# records the screen, Python only hosts Impacket -- but a toolchain that moves
+# under a rerun is a toolchain that can break one.
+$vendor = 'C:\aapf\vendor'
+if (-not (Test-Path (Join-Path $vendor 'MANIFEST.txt'))) {
+  throw "No vendored toolchain at $vendor. It ships with the corpus that " +
+        'AAPF_CORPUS points at; see VERIFICATION.md.'
 }
-$choco = "$env:ProgramData\chocolatey\bin\choco.exe"
 
-# --- Tools: ffmpeg (recording) + python (impacket ESE probe) ---------------
-& $choco install -y --no-progress ffmpeg python3
-# Make python/ffmpeg visible to this session
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+# ffmpeg is one static binary. Put it on the MACHINE path: the recording runs in
+# the interactive auto-logon session, not in this one.
+New-Item -ItemType Directory -Force -Path 'C:\tools' | Out-Null
+Copy-Item (Join-Path $vendor 'ffmpeg.exe') 'C:\tools\ffmpeg.exe' -Force
+$machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+if ($machinePath -notlike '*C:\tools*') {
+  [Environment]::SetEnvironmentVariable('Path', ($machinePath.TrimEnd(';') + ';C:\tools'), 'Machine')
+}
+
+# Python, silent install from the vendored installer (PrependPath puts it on the
+# machine path, which the auto-logon session inherits).
+$pyExe = Join-Path $vendor 'python-3.14.7-amd64.exe'
+$proc = Start-Process -FilePath $pyExe -Wait -PassThru -ArgumentList @(
+  '/quiet', 'InstallAllUsers=1', 'PrependPath=1', 'Include_test=0')
+if ($proc.ExitCode -ne 0) { throw "vendored Python installer failed ($($proc.ExitCode))" }
+$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' +
+            [Environment]::GetEnvironmentVariable('Path','User')
 
 # --- impacket (pure-Python; used only for the read-only ESE .open() probe) --
 # NOTE: we never run secretsdump here; only `impacket.ese.ESENT_DB(path)` to
-# demonstrate the page-size gate. Inside this isolated VM, AV does not interfere.
+# demonstrate the page-size gate. Pinned to 0.13.1 because every Impacket claim
+# in run-verification.ps1 and in the paper was measured against that release.
+# --no-index keeps pip off the network completely.
 $py = (Get-Command python -ErrorAction SilentlyContinue).Source
-if (-not $py) { $py = (Get-ChildItem "C:\Python*\python.exe" | Select-Object -First 1).FullName }
-& $py -m pip install --upgrade pip
-& $py -m pip install impacket
+if (-not $py) { $py = (Get-ChildItem 'C:\Program Files\Python*\python.exe' -ErrorAction SilentlyContinue | Select-Object -First 1).FullName }
+if (-not $py) { throw 'python not found after installing the vendored copy' }
+& $py -m pip install --no-index --find-links (Join-Path $vendor 'wheels') 'impacket==0.13.1'
+if ($LASTEXITCODE -ne 0) { throw "offline impacket install failed ($LASTEXITCODE)" }
+New-Item -ItemType Directory -Force -Path 'C:\scripts' | Out-Null
+$py | Set-Content -Path 'C:\scripts\python_path.txt' -Encoding ASCII
+Write-Host ("  python: {0}" -f $py)
+Write-Host ("  ffmpeg: C:\tools\ffmpeg.exe")
 
 # --- Keep the auto-logon desktop ACTIVE & UNLOCKED --------------------------
 # The box auto-locks (lock screen), which stops the Startup launcher from running

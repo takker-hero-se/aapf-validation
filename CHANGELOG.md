@@ -2,6 +2,35 @@
 
 All notable changes to this Zenodo record are documented here. Versioning follows [Semantic Versioning](https://semver.org/) for the dataset; patch releases denote corrections that do not change the contents (e.g., documentation typo fixes).
 
+## [Unreleased] — for the next Zenodo version
+
+The published record (v1.0.0, 2026-06-22) predates everything below. These
+changes are in the repository and are not yet in the record.
+
+### Added
+
+- **Synthetic Windows 11 client axis** under `samples/*/w11-25h2/clean/`:
+  `SRUDB.dat` (4 KiB), `DataStore.edb` (16 KiB) and `WebCacheV01.dat` (32 KiB),
+  all at format revision `0x012C`, so the page-size spectrum is covered on a
+  client OS as well as on a server.
+- **Self-recording verification sandbox** under `reproduction/sandbox/`: one
+  `vagrant up` builds a disposable, network-isolated Windows VM, re-derives the
+  paper's numbers as pass/fail assertions, and screen-records the run.
+- **Vendored toolchain** under `vendor/` (Python installer, `ffmpeg.exe`,
+  Impacket 0.13.1 wheels): provisioning needs no network, so the sandbox stays
+  isolated and its tool versions stay pinned.
+
+### Changed
+
+- The sandbox now runs **52 assertions** rather than the original 32. The added
+  sections are three negative controls that must trip, the client axis, and a
+  credential value-fidelity cross-check that re-derives the Poneglyph/Impacket
+  agreement on every run instead of citing
+  `reproduction/hash_value_validation.txt`.
+- `reproduction/verification-evidence/` now holds the 52-assertion run recorded
+  on 2026-09-20. It replaces the 32-assertion run of 2026-09-04, which the
+  documentation had outgrown.
+
 ## [1.0.0] — 2026-06-14 (planned)
 
 Initial public release accompanying paper submission.

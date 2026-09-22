@@ -1,4 +1,4 @@
-# orchestrate.ps1 — runs on the interactive desktop at auto-logon.
+# orchestrate.ps1 -- runs on the interactive desktop at auto-logon.
 # Starts ffmpeg screen recording, runs the verification visibly, then stops
 # ffmpeg gracefully (so the .mp4 is finalized) and writes the DONE sentinel.
 
@@ -21,7 +21,9 @@ try {
   $h = [Fg.Win]::GetConsoleWindow()
   [void][Fg.Win]::ShowWindow($h, 3)          # SW_MAXIMIZE
   [void][Fg.Win]::SetForegroundWindow($h)
-} catch { }
+} catch {
+  Write-Host ("    (could not raise the window; the recording may show it unmaximised: {0})" -f $_.Exception.Message) -ForegroundColor DarkGray
+}
 
 # Give the desktop/shell a moment to settle so the recording captures the run.
 Start-Sleep -Seconds 8
@@ -55,7 +57,7 @@ try {
   $rec.StandardInput.Flush()
   if (-not $rec.WaitForExit(20000)) { $rec.Kill() }
 } catch {
-  try { $rec.Kill() } catch {}
+  try { $rec.Kill() } catch { Write-Host "    (ffmpeg already gone)" -ForegroundColor DarkGray }
 }
 
 # --- Sentinel so the host wrapper / operator knows it finished --------------
