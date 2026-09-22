@@ -54,12 +54,13 @@ Table 1 and Table 5.
 
 ![Page sizes and counts](verification-evidence/01-page-sizes-and-counts.png)
 
-### 2 — Figures 3/4/5: page partition and page hex (sections [7]–[8])
-The Figure 5 page partition (misread `N = 4106` against the correct `N = 10`) and
-the Figure 3 *normal* (`0x18000`) vs *fully-zeroed* (`0x98000`) page headers, read
-from the real sample.
+### 2 — `itagState` and Figures 2/3/5 (sections [5]–[8])
+The `itagState` hex per artifact (all upper-nibble `ctagReserved = 0x1`), the
+Figure 2 bit-field interpretation, the Figure 5 page partition (misread
+`N = 4106` against the correct `N = 10`), and the Figure 3 *normal* (`0x18000`)
+vs *fully-zeroed* (`0x98000`) page headers, read from the real sample.
 
-![Figure 5 partition and page hex comparison](verification-evidence/02-figures-3-4-5-page-hex.png)
+![itagState interpretation, page partition and page hex](verification-evidence/02-itagstate-and-figures-2-3-5.png)
 
 ### 3 — Client axis, credential value fidelity, and final summary (sections [9]–[10] + SUMMARY)
 The 4/16/32 KiB client spectrum, the Poneglyph-vs-Impacket credential comparison
@@ -90,15 +91,15 @@ The illustrative page is page 4 (`0x18000 = 3 × 32768`) of
 
 ## Full text log
 
-The complete console transcript of the run recorded on 2026-09-20 (sections
+The complete console transcript of the run recorded on 2026-09-22 (sections
 `[0]`–`[10]`, UTF-16) is
 [`verification-evidence/verification-final-52pass.log`](verification-evidence/verification-final-52pass.log).
-The console scrolls during the run, so the three frames above are excerpts: the
-`itagState` sections `[3]`, `[5]` and `[6]` are in the log and the video.
+The three frames above cover every section between them; the log holds the run
+in full.
 
 ## Video
 
-The full screen recording of the run (`[0]`–`[10]` in a live console, 8 min 18 s) is
+The full screen recording of the run (`[0]`–`[10]` in a live console, 1 min 01 s) is
 `verification-evidence/verification-final-52pass.mp4`. It is distributed with the
 **Zenodo record only** (kept out of the Git repository for size); the three
 screenshots above are frames extracted from it.
