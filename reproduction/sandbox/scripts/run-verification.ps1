@@ -85,7 +85,7 @@ function DumpHeader($path, $off, $label) {
   $fs = [IO.File]::OpenRead($path)
   [void]$fs.Seek($off, 'Begin')
   $b = New-Object byte[] 40; [void]$fs.Read($b, 0, 40); $fs.Close()
-  Write-Host ("  {0}  @ 0x{1:X}  (page 4)" -f $label, $off) -ForegroundColor Cyan
+  Write-Host ("  {0}  @ 0x{1:X}  (page 2)" -f $label, $off) -ForegroundColor Cyan
   for ($rw = 0; $rw -lt 40; $rw += 16) {
     Write-Host ("    +{0:X2}: " -f $rw) -NoNewline
     for ($i = $rw; $i -lt [Math]::Min($rw + 16, 40); $i++) {
@@ -284,7 +284,7 @@ function Control($name, $tripped) {
 $scratch = Join-Path $env:TEMP ("aapf_ctl_" + [IO.Path]::GetRandomFileName())
 New-Item -ItemType Directory -Force -Path $scratch | Out-Null
 try {
-  # (a) Section [3] reads itagState at bytes 34-35 of page 4. Corrupt exactly
+  # (a) Section [3] reads itagState at bytes 34-35 of page 2. Corrupt exactly
   #     those two bytes in a copy and Hex2 must report something else.
   $srudb = "$S\resource\2025\clean\SRUDB.dat"
   $realHex = Hex2 $srudb 0x3000
@@ -292,7 +292,7 @@ try {
   $buf[0x3000 + 34] = 0xFF; $buf[0x3000 + 35] = 0xFF
   $mutA = Join-Path $scratch 'itagstate.bin'
   [IO.File]::WriteAllBytes($mutA, $buf)
-  Control ("itagState corruption at page 4 is visible (real $realHex -> " + (Hex2 $mutA 0x3000) + ")") `
+  Control ("itagState corruption at page 2 is visible (real $realHex -> " + (Hex2 $mutA 0x3000) + ")") `
           ((Hex2 $mutA 0x3000) -ne $realHex)
 
   # (b) Section [8] asserts the page at 0x98000 is entirely zero. Put one byte
@@ -353,10 +353,15 @@ $w19 = Counts "$S\activity\2019\clean\WebCacheV01.dat"
 Check "WebCache 2019 tables"  8     $w19.tables
 Check "WebCache 2019 MSysObjects" 115 $w19.MSysObjects
 
-Write-Host "`n[3] itagState hex at page 4 (bytes 34-35, little-endian)" -ForegroundColor Yellow
+Write-Host "`n[3] itagState hex at page 2 (bytes 34-35, little-endian)" -ForegroundColor Yellow
 Check "NTDS 2025 @0x18000 (=0x100A)"      "0A 10" (Hex2 "$S\identity\2025\clean\ntds.dit"      0x18000)
 Check "DataStore 2025 @0xC000 (=0x1041)"  "41 10" (Hex2 "$S\health\2025\clean\DataStore.edb"   0xC000)
 Check "SRUDB 2025 @0x3000 (=0x1010)"      "10 10" (Hex2 "$S\resource\2025\clean\SRUDB.dat"     0x3000)
+# The catalog root (MSysObjects FDP) is page 4, at (4+1)*32768 = 0x28000. This is
+# the page the unpatched parser actually aborts on, and it carries the same
+# reinterpreted itagState (0x1006: ctagReserved=1, tag count=6) as page 2 above,
+# so the change is not confined to the page the figures happen to dump.
+Check "NTDS 2025 @0x28000 catalog root (=0x1006)" "06 10" (Hex2 "$S\identity\2025\clean\ntds.dit" 0x28000)
 
 # Impacket's version is MEASURED, not assumed. This log is evidence: a hard-coded
 # "v0.13.1" would keep printing after a pip upgrade quietly replaced the parser
@@ -427,12 +432,12 @@ if ($ds -notmatch 'PROBE-READY') {
   Write-Host "  [FAIL] DataStore 16KiB failed to open under Impacket" -ForegroundColor Red; $script:fail++
 }
 
-Write-Host "`n[5] Page-4 header hex dump  (reproduces Figure 1; itagState @ bytes 34-35 in red)" -ForegroundColor Yellow
+Write-Host "`n[5] Page-2 header hex dump  (reproduces Figure 1; itagState @ bytes 34-35 in red)" -ForegroundColor Yellow
 DumpHeader "$S\identity\2025\clean\ntds.dit"    0x18000 "NTDS.dit 2025      (32KiB)"
 DumpHeader "$S\health\2025\clean\DataStore.edb" 0xC000  "DataStore.edb 2025 (16KiB)"
 DumpHeader "$S\resource\2025\clean\SRUDB.dat"   0x3000  "SRUDB.dat 2025     (4KiB)"
 
-# --- Derive everything below from the real page-4 header of the deposited NTDS ---
+# --- Derive everything below from the real page-2 header of the deposited NTDS ---
 $hdr64 = ReadBytes "$S\identity\2025\clean\ntds.dit" 0x18000 64
 $raw   = ([int]$hdr64[34]) -bor (([int]$hdr64[35]) -shl 8)   # itagState = 0x100A
 $count = $raw -band 0x0FFF                                   # masked tag count = 10
@@ -444,11 +449,11 @@ $grp = ($bin[0..3] -join '') + ' ' + ($bin[4..7] -join '') + ' ' + ($bin[8..11] 
 Write-Host ("    bits (15..0):  {0}" -f $grp)
 Write-Host ("    (a) INCORRECT - all 16 bits as tag count (unmasked parsers):") -ForegroundColor DarkGray
 Write-Host ("          N = {0}  ->  tag_array = 4 x {0} = {1} bytes  ->  OUT OF BOUNDS" -f $raw, (4*$raw)) -ForegroundColor Red
-Write-Host ("    (b) CORRECT   - upper 4 = ctagReserved, lower 12 = tag count:") -ForegroundColor DarkGray
+Write-Host ("    (b) CORRECT   - upper nibble = ctagReserved (3 bits) + reserved bit 15, lower 12 = tag count:") -ForegroundColor DarkGray
 Write-Host ("          ctagReserved = 0x{0:X4} >> 12   = {1}" -f $raw, $resv)
 Write-Host ("          tagCount     = 0x{0:X4} & 0x0FFF = {1}" -f $raw, $count)
 Write-Host ("          N = {0}  ->  tag_array = 4 x {0} = {1} bytes  ->  OK" -f $count, (4*$count)) -ForegroundColor Green
-Check "masked tagCount (page 4)" 10 $count
+Check "masked tagCount (page 2)" 10 $count
 
 Write-Host "`n[7] 32KiB page partition  (reproduces Figure 5; page = 32768, header = 40)" -ForegroundColor Yellow
 $pg = 32768; $hs = 40

@@ -9,7 +9,7 @@ Where [`REPRODUCE.md`](REPRODUCE.md) tells a reviewer **how** to reproduce each
 result by hand, this file is the **captured result** of doing so automatically:
 a single `vagrant up` builds a clean VM, runs the checks, and screen-records the
 run to video. Every check is a hard PASS/FAIL assertion against a pre-declared
-expected value; the run reproduced here yields **52 PASS / 0 FAIL**.
+expected value; the run reproduced here yields **53 PASS / 0 FAIL**.
 
 Everything below is regenerable from this record alone — see
 [Regenerating this evidence](#regenerating-this-evidence).
@@ -31,15 +31,15 @@ Everything below is regenerable from this record alone — see
 |---|---|---|---|
 | [1] | Page sizes & format revisions (`esentutl /mh`) | Table 1, §2.2 page-size heterogeneity; §5.1 revisions (`0x0122`/`0x012C`/`0x0014`) | 8/8 PASS |
 | [2] | Table / record counts (`poneglyph info`) | Table 5 (Schema Robustness × Clean), Table (Integrity) | 15/15 PASS |
-| [3] | `itagState` at page 4 (bytes 34–35) | Table (`itagState` per artifact); Figures 1–2 | 3/3 PASS |
+| [3] | `itagState` at page 2 (bytes 34–35), and at the page-4 catalog root | Table (`itagState` per artifact); Figures 1–2 | 4/4 PASS |
 | [4] | Impacket v0.13.1 full ESE read | Tools/benchmark table; §8.4 (4 KiB `SRUDB` aborts, 16 KiB `DataStore` opens) | 2/2 PASS |
-| [5] | Page-4 header hex dump | **Figure 1** (annotated ESE page header) | displayed |
+| [5] | Page-2 header hex dump | **Figure 1** (annotated ESE page header) | displayed |
 | [6] | `itagState = 0x100A` bit-field interpretation | **Figure 2** (correct vs 16-bit misread) | 1/1 PASS |
 | [7] | 32 KiB page partition | **Figure 5** (data area vs "ghost tags") | 1/1 PASS |
 | [8] | Normal page vs fully-zeroed page hex | **Figure 3** (page comparison) + underpins **Figure 4** (B-tree leaf chain) | 2/2 PASS |
 | [9] | Client axis (`w11-25h2`): the 4/16/32 KiB spectrum on one client | §8.5 client applicability; the deposited synthetic Windows 11 samples | 12/12 PASS |
 | [10] | Credential value fidelity: Poneglyph vs Impacket, per RID | §8.3 value-fidelity cross-validation; `reproduction/hash_value_validation.txt` | 8/8 PASS |
-| | **SUMMARY** | | **52 PASS / 0 FAIL** |
+| | **SUMMARY** | | **53 PASS / 0 FAIL** |
 
 All values are read live from the deposited databases; none are hard-coded. In
 particular [6]–[8] derive `4106` vs `10`, the `16 384`-byte ghost region, and
@@ -64,17 +64,18 @@ vs *fully-zeroed* (`0x98000`) page headers, read from the real sample.
 
 ### 3 — Client axis, credential value fidelity, and final summary (sections [9]–[10] + SUMMARY)
 The 4/16/32 KiB client spectrum, the Poneglyph-vs-Impacket credential comparison
-(counts and mismatches only; no hash is printed), the `SUMMARY: PASS = 52  FAIL =
+(counts and mismatches only; no hash is printed), the `SUMMARY: PASS = 53  FAIL =
 0` line, and the `Negative controls: 3/3` line below it.
 
-![Client axis, value fidelity, and summary](verification-evidence/03-client-axis-and-summary-52pass.png)
+![Client axis, value fidelity, and summary](verification-evidence/03-client-axis-and-summary-53pass.png)
 
 ## Figure-to-hex correspondence (read from the deposited `ntds.dit`)
 
-The illustrative page is page 4 (`0x18000 = 3 × 32768`) of
+The illustrative page is page 2 (`0x18000 = 3 × 32768`; libesedb places page N
+at `(N+1) × page_size`) of
 `samples/identity/2025/clean/ntds.dit`.
 
-| Artifact (2025, Clean) | Page-4 offset | `itagState` bytes 34–35 | Value | `ctagReserved` | tag count |
+| Artifact (2025, Clean) | Page-2 offset | `itagState` bytes 34–35 | Value | `ctagReserved` | tag count |
 |---|---|---|---|---|---|
 | `ntds.dit` (32 KiB) | `0x18000` | `0A 10` | `0x100A` | `0x1` | 10 |
 | `DataStore.edb` (16 KiB) | `0xC000` | `41 10` | `0x1041` | `0x1` | 65 |
@@ -93,14 +94,14 @@ The illustrative page is page 4 (`0x18000 = 3 × 32768`) of
 
 The complete console transcript of the run recorded on 2026-09-22 (sections
 `[0]`–`[10]`, UTF-16) is
-[`verification-evidence/verification-final-52pass.log`](verification-evidence/verification-final-52pass.log).
+[`verification-evidence/verification-final-53pass.log`](verification-evidence/verification-final-53pass.log).
 The three frames above cover every section between them; the log holds the run
 in full.
 
 ## Video
 
 The full screen recording of the run (`[0]`–`[10]` in a live console, 1 min 01 s) is
-`verification-evidence/verification-final-52pass.mp4`. It is distributed with the
+`verification-evidence/verification-final-53pass.mp4`. It is distributed with the
 **Zenodo record only** (kept out of the Git repository for size); the three
 screenshots above are frames extracted from it.
 
