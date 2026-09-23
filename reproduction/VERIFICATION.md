@@ -9,7 +9,7 @@ Where [`REPRODUCE.md`](REPRODUCE.md) tells a reviewer **how** to reproduce each
 result by hand, this file is the **captured result** of doing so automatically:
 a single `vagrant up` builds a clean VM, runs the checks, and screen-records the
 run to video. Every check is a hard PASS/FAIL assertion against a pre-declared
-expected value; the run reproduced here yields **53 PASS / 0 FAIL**.
+expected value; the run reproduced here yields **69 PASS / 0 FAIL**.
 
 Everything below is regenerable from this record alone — see
 [Regenerating this evidence](#regenerating-this-evidence).
@@ -39,7 +39,8 @@ Everything below is regenerable from this record alone — see
 | [8] | Normal page vs fully-zeroed page hex | **Figure 3** (page comparison) + underpins **Figure 4** (B-tree leaf chain) | 2/2 PASS |
 | [9] | Client axis (`w11-25h2`): the 4/16/32 KiB spectrum on one client | §8.5 client applicability; the deposited synthetic Windows 11 samples | 12/12 PASS |
 | [10] | Credential value fidelity: Poneglyph vs Impacket, per RID | §8.3 value-fidelity cross-validation; `reproduction/hash_value_validation.txt` | 8/8 PASS |
-| | **SUMMARY** | | **53 PASS / 0 FAIL** |
+| [11] | Three-parser record-count agreement (patched libesedb vs `impacket.ese` vs `dissect.esedb`) | Reference-method anchor for `ntds.dit` | 16/16 PASS |
+| | **SUMMARY** | | **69 PASS / 0 FAIL** |
 
 All values are read live from the deposited databases; none are hard-coded. In
 particular [6]–[8] derive `4106` vs `10`, the `16 384`-byte ghost region, and
@@ -64,10 +65,10 @@ vs *fully-zeroed* (`0x98000`) page headers, read from the real sample.
 
 ### 3 — Client axis, credential value fidelity, and final summary (sections [9]–[10] + SUMMARY)
 The 4/16/32 KiB client spectrum, the Poneglyph-vs-Impacket credential comparison
-(counts and mismatches only; no hash is printed), the `SUMMARY: PASS = 53  FAIL =
+(counts and mismatches only; no hash is printed), the `SUMMARY: PASS = 69  FAIL =
 0` line, and the `Negative controls: 3/3` line below it.
 
-![Client axis, value fidelity, and summary](verification-evidence/03-client-axis-and-summary-53pass.png)
+![Client axis, value fidelity, three-parser agreement, and summary](verification-evidence/03-client-axis-three-parser-and-summary-69pass.png)
 
 ## Figure-to-hex correspondence (read from the deposited `ntds.dit`)
 
@@ -94,14 +95,14 @@ at `(N+1) × page_size`) of
 
 The complete console transcript of the run recorded on 2026-09-22 (sections
 `[0]`–`[10]`, UTF-16) is
-[`verification-evidence/verification-final-53pass.log`](verification-evidence/verification-final-53pass.log).
+[`verification-evidence/verification-final-69pass.log`](verification-evidence/verification-final-69pass.log).
 The three frames above cover every section between them; the log holds the run
 in full.
 
 ## Video
 
 The full screen recording of the run (`[0]`–`[10]` in a live console, 1 min 01 s) is
-`verification-evidence/verification-final-53pass.mp4`. It is distributed with the
+`verification-evidence/verification-final-69pass.mp4`. It is distributed with the
 **Zenodo record only** (kept out of the Git repository for size); the three
 screenshots above are frames extracted from it.
 

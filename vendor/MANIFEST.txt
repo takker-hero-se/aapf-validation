@@ -14,6 +14,13 @@ ffmpeg.exe   (ffmpeg 9.0.1-essentials_build, bin/ffmpeg.exe from the archive)
     https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
 wheels/      (pip download "impacket==0.13.1" --only-binary=:all:
               --platform win_amd64 --python-version 3.14)
+wheels/      (pip download "dissect.esedb" --only-binary=:all:
+              --platform win_amd64 --python-version 3.14)
+             Added 2026-09-24 for the three-parser record-count
+             cross-check in run-verification.ps1 section [11]:
+             dissect.esedb is an independent reimplementation of
+             the ESE format, so agreement with it is evidence the
+             patched libesedb is not merely self-consistent.
 
 SHA-256
 -------
@@ -24,6 +31,9 @@ BA0EFAA9080B619FF2F3459D1D500C57BDDEA4A6B424B60A91141DB6FD2F08BC  wheels\blinker
 C658C50AC0C98CD755A2DD50B7977D3BCA7DF401DCC47FBDFA87DB53EF7D4E8B  wheels\charset_normalizer-3.5.1-cp314-cp314-win_amd64.whl
 255BC9599CF7748B4B1A446CCC735421BD08A2AE529A8B88597D3DE5664EE360  wheels\click-8.5.0-py3-none-any.whl
 AED8DB4F6D71C51EFB89530E12D9464E7BF2923D46C3205DC794A2A93F8C0648  wheels\cryptography-50.0.1-cp311-abi3-win_amd64.whl
+0427621CE67BAA3106DF2DC63A320D0A7F5C2DA88BA3FAF2EF5886A1A6B458FD  wheels\dissect_cstruct-4.7-py3-none-any.whl
+34E366B6D9373810388D73A1531A72A6A8521E69AEF6CAF4741F8657FC10681B  wheels\dissect_esedb-3.18-py3-none-any.whl
+5BC368D495AFEB867B8BF5711F752BD023AE22334B474B375F5AC9A326FEA89C  wheels\dissect_util-3.24-cp310-abi3-win_amd64.whl
 01D9BBC4A2D76BF0DB7C1F729812DED6D912BD318D3B1CF81D30C0F845DBF3AF  wheels\dnspython-2.8.0-py3-none-any.whl
 F4BCBEFC124291925F1A26446DA31A5178F9483862233B23C0C96A20701F670C  wheels\flask-3.1.3-py3-none-any.whl
 3E5349C1209CDD3B90BFF6F8B61C0D89AEA0F3DBBA6AD02AD254B9D3EF2301D0  wheels\impacket-0.13.1-py3-none-any.whl

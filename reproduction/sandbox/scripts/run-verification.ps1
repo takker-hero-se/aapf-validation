@@ -601,6 +601,126 @@ finally {
   Remove-Item $hashScratch -Recurse -Force -ErrorAction SilentlyContinue
 }
 
+
+Write-Host "`n[11] Three-parser record-count agreement  (patched libesedb vs impacket.ese vs dissect.esedb)" -ForegroundColor Yellow
+Write-Host "     Table 5 and the integrity table report counts our patched parser produced," -ForegroundColor DarkGray
+Write-Host "     and a reviewer is entitled to ask whether the patch merely makes libesedb" -ForegroundColor DarkGray
+Write-Host "     agree with itself. This section re-derives the same four tables with two" -ForegroundColor DarkGray
+Write-Host "     parsers that share no code with it: Impacket's pure-Python ESE reader and" -ForegroundColor DarkGray
+Write-Host "     Fox-IT's dissect.esedb. The counts below are compared, not assumed." -ForegroundColor DarkGray
+
+# dissect.esedb: independent reimplementation, pure Python.
+function DissectCounts($path) {
+  $tmp = Join-Path $env:TEMP ("dis_" + [IO.Path]::GetRandomFileName() + ".py")
+  @'
+import sys, os
+try:
+    from dissect.esedb import EseDB
+except Exception as e:
+    print("PROBE-NOLIB %s" % e); sys.exit(3)
+if not os.path.isfile(sys.argv[1]):
+    print("PROBE-NOFILE %s" % sys.argv[1]); sys.exit(2)
+print("PROBE-READY"); sys.stdout.flush()
+with open(sys.argv[1], "rb") as fh:
+    db = EseDB(fh)
+    names = [t.name for t in db.tables()]
+    print("tables=%d" % len(names))
+    for n in ("datatable", "link_table", "sd_table", "MSysObjects"):
+        if n not in names:
+            print("%s=MISSING" % n); continue
+        c = 0
+        for _r in db.table(n).records():
+            c += 1
+        print("%s=%d" % (n, c))
+print("DISSECT-OK")
+'@ | Set-Content -Path $tmp -Encoding ASCII
+  try   { $out = & $PY $tmp $path 2>&1 }
+  catch { $out = "PROBE-LAUNCH-FAILED: " + $_.Exception.Message }
+  Remove-Item $tmp -ErrorAction SilentlyContinue
+  return (J $out)
+}
+
+# impacket.ese: the same reader section [4] uses, here counting rows per table.
+function ImpacketCounts($path) {
+  $tmp = Join-Path $env:TEMP ("impc_" + [IO.Path]::GetRandomFileName() + ".py")
+  @'
+import sys, os
+from impacket.ese import ESENT_DB
+if not os.path.isfile(sys.argv[1]):
+    print("PROBE-NOFILE %s" % sys.argv[1]); sys.exit(2)
+print("PROBE-READY"); sys.stdout.flush()
+db = ESENT_DB(sys.argv[1])
+tabs = None
+for a in ("tables", "_ESENT_DB__tables"):
+    if hasattr(db, a):
+        try:
+            tabs = list(getattr(db, a).keys()); break
+        except Exception:
+            pass
+names = []
+for t in (tabs or []):
+    names.append(t.decode("latin-1") if isinstance(t, (bytes, bytearray)) else t)
+print("tables=%d" % len(names))
+for n in ("datatable", "link_table", "sd_table", "MSysObjects"):
+    if n not in names:
+        print("%s=MISSING" % n); continue
+    cur = db.openTable(n)
+    c = 0
+    while True:
+        r = db.getNextRow(cur)
+        if r is None:
+            break
+        c += 1
+    print("%s=%d" % (n, c))
+print("IMPACKET-OK")
+'@ | Set-Content -Path $tmp -Encoding ASCII
+  try   { $out = & $PY $tmp $path 2>&1 }
+  catch { $out = "PROBE-LAUNCH-FAILED: " + $_.Exception.Message }
+  Remove-Item $tmp -ErrorAction SilentlyContinue
+  return (J $out)
+}
+
+# No "$" anchor: Out-String leaves a \r before each \n, so "(\d+)$" would
+# never match. Counts() above omits the anchor for the same reason.
+function KV($text, $key) {
+  $m = [regex]::Match($text, ("(?m)^\s*" + [regex]::Escape($key) + "\s*=\s*(\d+)"))
+  if ($m.Success) { return [int]$m.Groups[1].Value }
+  return $null
+}
+
+foreach ($nt in @(
+  @{ os = '2019'; path = "$S\identity\2019\clean\ntds.dit" },
+  @{ os = '2025'; path = "$S\identity\2025\clean\ntds.dit" }
+)) {
+  Write-Host ("  -- WS{0} {1}" -f $nt.os, (Split-Path $nt.path -Leaf)) -ForegroundColor DarkGray
+  $poneCnt = Counts $nt.path   # NOT $pone: that would clobber $PONE
+  $dis  = DissectCounts $nt.path
+  $imp  = ImpacketCounts $nt.path
+
+  # A probe that never ran must not be read as agreement.
+  if ($dis -notmatch 'PROBE-READY') {
+    Write-Host ("  [FAIL] WS{0} dissect.esedb probe did not run: {1}" -f $nt.os, (($dis -split "`n")[0])) -ForegroundColor Red
+    $script:fail++
+  } elseif ($imp -notmatch 'PROBE-READY') {
+    Write-Host ("  [FAIL] WS{0} impacket probe did not run: {1}" -f $nt.os, (($imp -split "`n")[0])) -ForegroundColor Red
+    $script:fail++
+  } else {
+    foreach ($tbl in 'datatable','link_table','sd_table','MSysObjects') {
+      $p = $null
+      if ($poneCnt.ContainsKey($tbl)) { $p = [int]$poneCnt[$tbl] }
+      $d = KV $dis $tbl
+      $i = KV $imp $tbl
+      if ($null -eq $p) {
+        Write-Host ("  [FAIL] WS{0} {1}: patched libesedb returned no count" -f $nt.os, $tbl) -ForegroundColor Red
+        $script:fail++
+        continue
+      }
+      Check ("WS{0} {1}: dissect.esedb agrees with patched libesedb" -f $nt.os, $tbl) $p $d
+      Check ("WS{0} {1}: impacket.ese agrees with patched libesedb"  -f $nt.os, $tbl) $p $i
+    }
+  }
+}
+
 Write-Host "`n============================================================" -ForegroundColor Cyan
 $col = if ($script:fail -eq 0) { "Green" } else { "Red" }
 Write-Host ("  SUMMARY:  PASS = {0}   FAIL = {1}" -f $script:pass, $script:fail) -ForegroundColor $col

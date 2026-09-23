@@ -49,6 +49,13 @@ if (-not $py) { $py = (Get-ChildItem 'C:\Program Files\Python*\python.exe' -Erro
 if (-not $py) { throw 'python not found after installing the vendored copy' }
 & $py -m pip install --no-index --find-links (Join-Path $vendor 'wheels') 'impacket==0.13.1'
 if ($LASTEXITCODE -ne 0) { throw "offline impacket install failed ($LASTEXITCODE)" }
+
+# --- dissect.esedb (Fox-IT; independent reimplementation of the ESE format) --
+# Section [11] compares per-table record counts across three parsers that share
+# no code: our patched libesedb (via poneglyph), impacket.ese, and this. That is
+# what keeps the record counts from resting on the patched parser alone.
+& $py -m pip install --no-index --find-links (Join-Path $vendor 'wheels') 'dissect.esedb'
+if ($LASTEXITCODE -ne 0) { throw "offline dissect.esedb install failed ($LASTEXITCODE)" }
 New-Item -ItemType Directory -Force -Path 'C:\scripts' | Out-Null
 $py | Set-Content -Path 'C:\scripts\python_path.txt' -Encoding ASCII
 Write-Host ("  python: {0}" -f $py)
