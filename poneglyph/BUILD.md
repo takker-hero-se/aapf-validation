@@ -63,3 +63,29 @@ If `cargo clean -p libesedb-sys` does not pick up your patch changes, also delet
 ## License
 
 The Poneglyph source is LGPL-3.0-or-later. See https://github.com/takker-hero-se/Poneglyph for the source repository and full license terms.
+
+## Fix 2 ablation builds
+
+Two extra binaries accompany this record so the Fix 2 claim can be checked
+rather than taken on trust:
+
+| Binary | libesedb patches | Contains |
+|---|---|---|
+| `poneglyph-withfix2.exe` | 001-006 | Fix 1 (revision-gated `itagState` mask) **and** Fix 2 (B-tree `IS_LEAF` guard) |
+| `poneglyph-nofix2.exe` | 001-005 | Fix 1 only; patch `006-ws2025-btree` removed |
+
+Both were built on 2026-09-24 from one source tree (poneglyph 0.2.3), so the
+only difference between them is Fix 2. Running both over every sample in
+`samples/` gives identical table and record counts on all 22 of them, in every
+acquisition state, on both server editions and on the Windows 11 client.
+
+`reproduction/fix2_ablation.txt` records the per-sample output of that run
+together with the SHA-256 of each binary. The conclusion it supports is narrow
+and deliberately stated as such in the paper: Fix 2 is **inert on this corpus**.
+Its triggering condition was observed once, in a dirty 32 KiB acquisition that
+is not part of the deposit, so a reviewer cannot reproduce the abort it
+prevents from these artifacts alone.
+
+Note that `poneglyph.exe` (the 0.2.3 release binary shipped here) is a third,
+earlier build and hashes differently from both; it is not one of the two
+compared above.
