@@ -169,7 +169,7 @@ On your local workspace (the *paper*, not this repo):
 
 ```powershell
 $doi = "10.5281/zenodo.12345678"  # ← replace with your actual DOI
-cd "C:\Users\takke\OneDrive\ドキュメント\workspace\docs\paper-ese-32k"
+cd "C:\path\to\research-papers\ese-32k"   # your working copy of the paper
 (Get-Content main.tex)       -replace '10.5281/zenodo.XXXXXXX', $doi | Set-Content main.tex
 (Get-Content references.bib) -replace '10.5281/zenodo.XXXXXXX', $doi | Set-Content references.bib
 pdflatex -interaction=nonstopmode main.tex
