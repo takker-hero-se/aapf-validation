@@ -4,11 +4,12 @@ This Zenodo record accompanies the following paper.
 
 ## Title
 
-*Silent Evidence Loss in Windows Server 2025: Cross-Page-Size ESE Format Changes and Their Forensic Integrity Implications*
+*Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance*
 
 ## Authors
 
 - Takayuki Hirose (Independent Researcher, corresponding author: `takker0708@gmail.com`)
+- Hiroshi Koide (Kyushu University)
 
 ## Target venue
 

@@ -5,7 +5,7 @@
 [![Patches: 7](https://img.shields.io/badge/patches-7-success.svg)](patches/)
 [![AAPF samples: 14](https://img.shields.io/badge/samples-14%20acquisitions-informational.svg)](https://doi.org/10.5281/zenodo.20789636)
 
-**Companion artifacts** for the paper *"Silent Evidence Loss in Windows Server 2025: Cross-Page-Size ESE Format Changes and Their Forensic Integrity Implications"* (Forensic Science International: Digital Investigation, 2026).
+**Companion artifacts** for the paper *"Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance"* (Forensic Science International: Digital Investigation, 2026).
 
 > **Code on GitHub, full archive on Zenodo.** This repository hosts the patches, reproduction scripts, and documentation. The 730 MB of ESE database samples is distributed via Zenodo (DOI above) and intentionally not in Git. After cloning, run `tools/package.ps1` to stage from a local AAPF samples tree, or download the samples directly from Zenodo.
 
@@ -131,6 +131,7 @@ See `ETHICAL_USE.md` for the full statement.
 ## Authors and contact
 
 - **Takayuki Hirose** — Independent Researcher
+- **Hiroshi Koide** — Kyushu University
 
 Corresponding author: Takayuki Hirose, `takker0708@gmail.com`
 

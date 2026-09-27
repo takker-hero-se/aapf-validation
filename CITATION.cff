@@ -47,11 +47,14 @@ keywords:
 references:
   - type: article
     title: >-
-      Silent Evidence Loss in Windows Server 2025: Cross-Page-Size ESE
-      Format Changes and Their Forensic Integrity Implications
+      Silent Evidence Loss in Modern Windows: A Detectable Class of
+      Version-Gated Format Change and Its ESE Instance
     authors:
       - family-names: Hirose
         given-names: Takayuki
+      - family-names: Koide
+        given-names: Hiroshi
+        affiliation: Kyushu University
     journal: "Forensic Science International: Digital Investigation"
     year: 2026
     publisher:
