@@ -14,14 +14,16 @@
 #
 # Flags:
 #   -SkipCopy   Re-hash and regenerate MANIFEST.md without copying again
-#   -Zip        Create aapf-validation-1.0.0.zip at the end (slow for ~730 MB)
+#   -Zip        Create aapf-validation-<Version>.zip at the end (slow for ~780 MB)
+#   -Version    Version string for the zip name (default 1.1.0)
 #   -DryRun     Print intended actions without executing them
 
 [CmdletBinding()]
 param(
     [switch]$SkipCopy,
     [switch]$Zip,
-    [switch]$DryRun
+    [switch]$DryRun,
+    [string]$Version = '1.1.0'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -130,11 +132,16 @@ if ($DryRun) {
 
 # Generate MANIFEST.md
 Write-Host "Hashing all files in staging tree..." -ForegroundColor Cyan
+# Repository housekeeping that is not part of the data record: excluded from
+# both the manifest and the zip, so the manifest describes exactly the zip.
+$RepoOnlyDirs  = @('.git', 'tools')
+$RepoOnlyFiles = @('MANIFEST.md', 'UPLOAD_INSTRUCTIONS.md', 'SETUP_GITHUB.md',
+                   'CONTRIBUTING.md', '.gitignore', '.gitattributes')
 $allFiles = Get-ChildItem -Path $StagingRoot -Recurse -File -Force |
     Where-Object {
-        $_.FullName -notlike "*\tools\package.ps1" -and `
-        $_.FullName -notlike "*\MANIFEST.md" -and `
-        $_.FullName -notlike "*\.git\*"
+        $rel = $_.FullName.Substring($StagingRoot.Length + 1)
+        $topDir = ($rel -split '[\\/]')[0]
+        ($RepoOnlyDirs -notcontains $topDir) -and ($RepoOnlyFiles -notcontains $rel)
     } |
     Sort-Object FullName
 
@@ -165,13 +172,16 @@ Write-Host "MANIFEST.md written: $($allFiles.Count) files, $(("{0:N1}" -f ($tota
 Write-Host ""
 
 if ($Zip) {
-    $zipName = "aapf-validation-1.0.0.zip"
+    $zipName = "aapf-validation-$Version.zip"
     $zipPath = Join-Path (Split-Path -Parent $StagingRoot) $zipName
     if (Test-Path $zipPath) {
         Remove-Item -Path $zipPath -Force
     }
-    Write-Host "Creating $zipName (this may take several minutes for ~730 MB)..." -ForegroundColor Cyan
-    Compress-Archive -Path (Join-Path $StagingRoot '*') -DestinationPath $zipPath -CompressionLevel Optimal
+    Write-Host "Creating $zipName (this may take several minutes for ~780 MB)..." -ForegroundColor Cyan
+    $zipItems = Get-ChildItem -Path $StagingRoot -Force |
+        Where-Object { ($RepoOnlyDirs -notcontains $_.Name) -and ($RepoOnlyFiles -notcontains $_.Name) -or ($_.Name -eq 'MANIFEST.md') } |
+        ForEach-Object { $_.FullName }
+    Compress-Archive -Path $zipItems -DestinationPath $zipPath -CompressionLevel Optimal
     $zipHash = (Get-FileHash -Algorithm SHA256 $zipPath).Hash.ToLower()
     $zipSize = (Get-Item $zipPath).Length
     Write-Host ""

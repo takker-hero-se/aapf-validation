@@ -174,3 +174,18 @@ A. Zenodo accepts file uploads via drag-drop or file picker. If you uploaded as 
 
 **Q. Should I upload a .zip instead of individual files?**
 A. Zenodo's recommendation is to upload files directly (so the file list is browsable in the web UI). A `.zip` is useful as an additional backup and convenience but is not the primary upload format. The `tools/package.ps1 -Zip` option produces one if you want it.
+
+---
+
+## Publishing a new version (v1.1.0 and later)
+
+The v1.0.0 record was uploaded by hand as one zip. Later versions follow the same path; do **not** create a GitHub Release for them, because the GitHub-Zenodo integration (if enabled) would mint a *separate* Zenodo record from the repository alone, without the samples.
+
+1. `.	ools\package.ps1 -SkipCopy -Zip -Version 1.1.0` — regenerates `MANIFEST.md` and writes `C:\devapf-validation-1.1.0.zip`. The zip excludes `.git/`, `tools/`, this file, `SETUP_GITHUB.md`, `CONTRIBUTING.md` and the git dot-files; `MANIFEST.md` describes exactly the zip's contents.
+2. Spot-check three files against `MANIFEST.md` and confirm the zip has no `.git/` entries (`python -c "import zipfile; ..."`).
+3. Commit the repository, tag `v1.1.0`, push the commits and the tag. (A tag does not trigger the integration; only a Release does.)
+4. On https://zenodo.org, open the existing record (concept DOI 10.5281/zenodo.20789635) → **New version**.
+5. Remove the inherited `aapf-validation-1.0.0.zip`; upload `aapf-validation-1.1.0.zip` (~245 MB).
+6. Metadata: set the title, description, version `1.1.0` and publication date from `.zenodo.json`; keep creators, license (CC-BY-4.0) and related identifiers.
+7. **Publish**. Zenodo assigns the version DOI; the concept DOI keeps resolving to the latest version.
+8. Afterwards: record the version DOI in `CHANGELOG.md`, and in the paper cite either the version DOI or the concept DOI (the paper currently cites the v1.0.0 version DOI 10.5281/zenodo.20789636, which will keep pointing at v1.0.0).

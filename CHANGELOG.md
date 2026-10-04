@@ -2,12 +2,24 @@
 
 All notable changes to this Zenodo record are documented here. Versioning follows [Semantic Versioning](https://semver.org/) for the dataset; patch releases denote corrections that do not change the contents (e.g., documentation typo fixes).
 
-## [Unreleased] — for the next Zenodo version
+## [1.1.0] — 2026-10-04
 
-The published record (v1.0.0, 2026-06-22) predates everything below. These
-changes are in the repository and are not yet in the record.
+Second Zenodo version. Everything below was in the repository after the
+v1.0.0 record (2026-06-22) and is now in the record.
 
 ### Added
+
+- **Eight more acquisitions**, bringing the sample set to **22**: Identity 6,
+  Health 7, Activity 4, Resource 5, across Windows Server 2019, Windows Server
+  2025 and a synthetic Windows 11 25H2 client. Resource now includes the
+  `partial` state (the DPS-held `SRUDB.dat` captured live).
+- **Fix 2 ablation pair** under `poneglyph/`: `poneglyph-withfix2.exe` and
+  `poneglyph-nofix2.exe`, built from one source tree differing only in the
+  Fix 2 patch, with the record showing identical counts on all 22 samples.
+- **Three-parser agreement** section in the reproduction docs (patched
+  libesedb vs `impacket.ese` vs `dissect.esedb` on both `ntds.dit` samples).
+- **ESE format-revision survey** (`survey_ese_revisions.ps1`) and its result
+  from the pinned client sandbox.
 
 - **Synthetic Windows 11 client axis** under `samples/*/w11-25h2/clean/`:
   `SRUDB.dat` (4 KiB), `DataStore.edb` (16 KiB) and `WebCacheV01.dat` (32 KiB),
@@ -22,16 +34,24 @@ changes are in the repository and are not yet in the record.
 
 ### Changed
 
-- The sandbox now runs **52 assertions** rather than the original 32. The added
-  sections are three negative controls that must trip, the client axis, and a
+- The sandbox now runs **69 assertions** rather than the original 32. The added
+  sections are three negative controls that must trip, the client axis, a
   credential value-fidelity cross-check that re-derives the Poneglyph/Impacket
   agreement on every run instead of citing
-  `reproduction/hash_value_validation.txt`.
-- `reproduction/verification-evidence/` now holds the 52-assertion run recorded
-  on 2026-09-20. It replaces the 32-assertion run of 2026-09-04, which the
-  documentation had outgrown.
+  `reproduction/hash_value_validation.txt`, and three-parser record-count
+  agreement.
+- `reproduction/verification-evidence/` now holds the 69-assertion run recorded
+  on 2026-09-23 (69 PASS / 0 FAIL). It replaces the 32-assertion run of
+  2026-09-04, which the documentation had outgrown.
+- The companion paper's title is now "Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance"; the dataset title gains "and
+  Windows 11" to match the client axis. Hiroshi Koide (Kyushu University) is
+  a co-author of the paper; the dataset creator is unchanged.
+- "Previously unreported" is no longer claimed: Microsoft's open-source engine
+  headers define the itagState split, and the dissect.esedb and Impacket
+  threads reported the 4 KiB and 32 KiB cases first. The paper's claim is the
+  controlled attribution to the format revision.
 
-## [1.0.0] — 2026-06-14 (planned)
+## [1.0.0] — 2026-06-14 (published 2026-06-22)
 
 Initial public release accompanying paper submission.
 

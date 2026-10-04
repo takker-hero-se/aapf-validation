@@ -1,19 +1,19 @@
-# AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025
+# AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025 and Windows 11
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20789636.svg)](https://doi.org/10.5281/zenodo.20789636)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20789635.svg)](https://doi.org/10.5281/zenodo.20789635)
 [![License: LGPL-3.0](https://img.shields.io/badge/License-LGPL--3.0-blue.svg)](LICENSE.md)
 [![Patches: 7](https://img.shields.io/badge/patches-7-success.svg)](patches/)
-[![AAPF samples: 14](https://img.shields.io/badge/samples-14%20acquisitions-informational.svg)](https://doi.org/10.5281/zenodo.20789636)
+[![AAPF samples: 22](https://img.shields.io/badge/samples-22%20acquisitions-informational.svg)](https://doi.org/10.5281/zenodo.20789635)
 
 **Companion artifacts** for the paper *"Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance"* (Forensic Science International: Digital Investigation, 2026).
 
-> **Code on GitHub, full archive on Zenodo.** This repository hosts the patches, reproduction scripts, and documentation. The 730 MB of ESE database samples is distributed via Zenodo (DOI above) and intentionally not in Git. After cloning, run `tools/package.ps1` to stage from a local AAPF samples tree, or download the samples directly from Zenodo.
+> **Code on GitHub, full archive on Zenodo.** This repository hosts the patches, reproduction scripts, and documentation. The ~780 MB of ESE database samples is distributed via Zenodo (DOI above) and intentionally not in Git. After cloning, run `tools/package.ps1` to stage from a local AAPF samples tree, or download the samples directly from Zenodo.
 
 This Zenodo record contains:
 
-- **Patches** — minimal source-level patches for `libesedb` (the most widely deployed open-source Extensible Storage Engine parser) that resolve a previously unreported family of WS2025 `itagState` reinterpretation failures spanning 4 KiB, 16 KiB, and 32 KiB pages.
+- **Patches** — minimal source-level patches for `libesedb` (the most widely deployed open-source Extensible Storage Engine parser) that resolve the WS2025 / Windows 11 24H2 `itagState` reinterpretation failures spanning 4 KiB, 16 KiB, and 32 KiB pages.
 - **Poneglyph binary** — a Rust-based NTDS.dit analysis tool incorporating the universal patch, used as the reference parser in the paper's empirical validation.
-- **AAPF samples** — Extensible Storage Engine database files (`ntds.dit`, `DataStore.edb`, `WebCacheV01.dat`, `SRUDB.dat`) acquired from isolated lab environments populated by `BadBlood`, `PSWindowsUpdate`, `Playwright`, and `Atomic Red Team`. Captured in three snapshot states (Clean, Crashed, Locked) per database, on both Windows Server 2019 and Windows Server 2025, for a total of 14 sample acquisitions.
+- **AAPF samples** — Extensible Storage Engine database files (`ntds.dit`, `DataStore.edb`, `WebCacheV01.dat`, `SRUDB.dat`) acquired from isolated lab environments populated by `BadBlood`, `PSWindowsUpdate`, `Playwright`, and `Atomic Red Team`. Captured in Clean, service-stop (directory `crashed`) and Locked (VSS) states per database, on Windows Server 2019, Windows Server 2025 and a synthetic Windows 11 25H2 client, for a total of 22 acquisitions.
 - **Reproduction scripts** — batch verification helpers (`esentutl /mh` page-size verification; Poneglyph parse verification) and a reproducibility checklist tied to the manuscript's Tables 1, 4, 5, and 6.
 
 The record is structured so that an examiner reviewing the paper can independently reproduce every empirical claim by running two batch scripts against the deposited samples and the deposited patched binary.
@@ -49,12 +49,12 @@ A pre-computed `expected_outputs.txt` is included so reviewers can verify their 
 ├── CHANGELOG.md                           # Version history
 ├── patches/
 │   ├── README.md
-│   ├── fix-ws2025-itag-state.patch        # ← key universal patch
-│   ├── zzz-fix-ws2025-btree.patch
-│   ├── fix-multi_value_guard.patch
-│   ├── fix-max_leaf_pages.patch
-│   ├── qol-leaf_pages.patch
-│   └── fix-xwin.patch
+│   ├── 001-max-leaf-pages.patch
+│   ├── 002-multi-value-guard.patch
+│   ├── 003-ws2025-itag-state.patch        # ← the revision-gated fix (Fix 1)
+│   ├── 004-xwin.patch
+│   ├── 005-qol-leaf-pages.patch
+│   └── 006-ws2025-btree.patch             # Fix 2
 ├── poneglyph/
 │   ├── README.md
 │   ├── BUILD.md
@@ -101,7 +101,7 @@ If you use this dataset, please cite both the paper and the dataset.
 
 For the dataset, use the BibTeX in `CITATION.cff` or simply:
 
-> Hirose, T. (2026). *AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.20789636
+> Hirose, T. (2026). *AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025 and Windows 11* (Version 1.1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.20789635
 
 For the paper, see `docs/PAPER.md`.
 
