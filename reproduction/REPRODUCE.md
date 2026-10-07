@@ -8,6 +8,7 @@ This document maps each empirical claim in the paper to the artifact in this Zen
 cd path\to\extracted\zenodo\record
 .\reproduction\verify_pagesize.ps1   # Reproduces Table footnotes on page sizes
 .\reproduction\parse_all.ps1         # Reproduces Table 5 and Section 5.5.2
+.\reproduction\tag_bound_scan.ps1    # Reproduces the 32 KiB tag-count bound and the per-page maxima (Section 5)
 ```
 
 The two scripts together complete in approximately 5 minutes on a modern Windows host. Reviewer wall-clock is dominated by the page-table walks on the 75 MB WS2025 NTDS.dit; faster machines complete in under 2 minutes.
@@ -24,6 +25,7 @@ The two scripts together complete in approximately 5 minutes on a modern Windows
 | Figures 1–2 `itagState = 0x100A` for NTDS.dit (page 4) | Manual hex inspection at file offset `0x18000` (page 4 = 3 × 32768) of `samples/identity/2025/clean/ntds.dit` | Bytes 34–35 = `0A 10` (little-endian = `0x100A`; upper nibble `0x1` = ctagReserved, lower 12 bits = 10 tags) |
 | Section 6.2 / Issue 3 root cause for 16 KiB DataStore.edb | Manual hex inspection at file offset `0xC000` of `samples/health/2025/clean/DataStore.edb` | Bytes 34–35 = `41 10` (little-endian = `0x1041`) |
 | Section 7.2 / Issue 4 root cause for 4 KiB SRUDB.dat | Manual hex inspection at file offset `0x3000` of `samples/resource/2025/clean/SRUDB.dat` | Bytes 34–35 = `10 10` (little-endian = `0x1010`) |
+| Section 5 tag-count bound: a 32 KiB table leaf holds at most 3,268 lines (10 bytes per node over 32,680 usable bytes), 5,446 only for degenerate empty lines; densest deposited page 2,514 tags (WS2025 `ntds.dit`), legacy WS2019 `WebCacheV01.dat` max 116 | `tag_bound_scan.ps1` (reads the tag array of every 32 KiB page in three samples; no parser involved) | Printed maxima 116 / 498 / 2,514; none exceeds 4,095 |
 | Section 5.1 backward compatibility (mathematical no-op on WS2019) | Build unpatched libesedb and patched libesedb (`patches/` + reference upstream); diff `parse_all.ps1` output | Byte-identical results on all WS2019 samples |
 | Credential value fidelity (decrypted NT/LM hashes, not just record counts) | Run `poneglyph.exe hashes` (v0.2.3, `poneglyph/poneglyph.exe`) and Impacket `secretsdump.py` v0.13.1 on both NTDS.dit samples; compare NT hashes per RID | `hash_value_validation.txt` — 2{,}494/2{,}494 (WS2019) and 2{,}492/2{,}492 (WS2025) byte-for-byte matches, zero mismatches |
 | Client-side applicability (the format change is not server-only) | Run `poneglyph.exe info` and the Impacket ESE probe on the synthetic Windows 11 24H2+ client samples under `samples/{resource,health,activity}/w11-25h2/` | `client_applicability.txt` — 4/16/32 KiB all at revision `0x012C`; Impacket v0.13.1 still fails on the 4 KiB `SRUDB.dat` while the patch recovers all 15 tables |

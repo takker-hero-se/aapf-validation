@@ -75,6 +75,7 @@ A pre-computed `expected_outputs.txt` is included so reviewers can verify their 
 │   ├── REPRODUCE.md
 │   ├── verify_pagesize.ps1
 │   ├── parse_all.ps1
+│   ├── tag_bound_scan.ps1                 # Tag-count bound on 32 KiB pages (paper §5)
 │   └── expected_outputs.txt
 └── docs/
     ├── BADBLOOD_PROVENANCE.md             # Synthetic-data generation details

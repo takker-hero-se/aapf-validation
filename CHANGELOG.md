@@ -18,6 +18,11 @@ v1.0.0 record (2026-06-22) and is now in the record.
   Fix 2 patch, with the record showing identical counts on all 22 samples.
 - **Three-parser agreement** section in the reproduction docs (patched
   libesedb vs `impacket.ese` vs `dissect.esedb` on both `ntds.dit` samples).
+- **Tag-count bound scan** (`reproduction/tag_bound_scan.ps1`): derives the
+  maximum number of tags a 32 KiB page can carry from the engine's own node
+  accounting and reads the tag array of every 32 KiB page in three samples.
+  Shows that no real record type can push a legacy page past the 12-bit
+  count (table leaf ≤ 3,268 lines; densest deposited page 2,514).
 - **ESE format-revision survey** (`survey_ese_revisions.ps1`) and its result
   from the pinned client sandbox.
 
