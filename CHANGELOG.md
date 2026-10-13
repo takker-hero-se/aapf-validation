@@ -48,7 +48,7 @@ v1.0.0 record (2026-06-22) and is now in the record.
 - `reproduction/verification-evidence/` now holds the 69-assertion run recorded
   on 2026-09-23 (69 PASS / 0 FAIL). It replaces the 32-assertion run of
   2026-09-04, which the documentation had outgrown.
-- The companion paper's title is now "Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance"; the dataset title gains "and
+- The companion paper's title is now "Silent Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure" (revised 2026-10-08 after co-author review); the dataset title gains "and
   Windows 11" to match the client axis. Hiroshi Koide (Kyushu University) is
   a co-author of the paper; the dataset creator is unchanged.
 - "Previously unreported" is no longer claimed: Microsoft's open-source engine

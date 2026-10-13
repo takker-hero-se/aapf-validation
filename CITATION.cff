@@ -3,7 +3,7 @@ message: "If you use this dataset, please cite both the paper and the dataset us
 type: dataset
 title: "AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025 and Windows 11"
 abstract: >-
-  Companion artifacts for the paper "Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance"
+  Companion artifacts for the paper "Silent Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure"
   (Forensic Science International: Digital Investigation, 2026). Includes:
   (a) source-level patches for libesedb that resolve the Windows Server 2025 /
   Windows 11 24H2 itagState reinterpretation failures spanning 4 KiB, 16 KiB
@@ -49,8 +49,8 @@ keywords:
 references:
   - type: article
     title: >-
-      Silent Evidence Loss in Modern Windows: A Detectable Class of
-      Version-Gated Format Change and Its ESE Instance
+      Silent Evidence Loss in Modern Windows: The ESE Format Revision,
+      Not the Page Size, Governs Parser Failure
     authors:
       - family-names: Hirose
         given-names: Takayuki

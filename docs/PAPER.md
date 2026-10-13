@@ -4,7 +4,7 @@ This Zenodo record accompanies the following paper.
 
 ## Title
 
-*Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance*
+*Silent Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure*
 
 ## Authors
 

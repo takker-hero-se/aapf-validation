@@ -5,7 +5,7 @@
 [![Patches: 7](https://img.shields.io/badge/patches-7-success.svg)](patches/)
 [![AAPF samples: 22](https://img.shields.io/badge/samples-22%20acquisitions-informational.svg)](https://doi.org/10.5281/zenodo.20789635)
 
-**Companion artifacts** for the paper *"Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance"* (Forensic Science International: Digital Investigation, 2026).
+**Companion artifacts** for the paper *"Silent Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure"* (Forensic Science International: Digital Investigation, 2026).
 
 > **Code on GitHub, full archive on Zenodo.** This repository hosts the patches, reproduction scripts, and documentation. The ~780 MB of ESE database samples is distributed via Zenodo (DOI above) and intentionally not in Git. After cloning, run `tools/package.ps1` to stage from a local AAPF samples tree, or download the samples directly from Zenodo.
 

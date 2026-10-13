@@ -1,8 +1,8 @@
 {
   "title": "AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025 and Windows 11",
-  "description": "<p>Companion artifacts for the paper <strong>\"Silent Evidence Loss in Modern Windows: A Detectable Class of Version-Gated Format Change and Its ESE Instance\"</strong> (Forensic Science International: Digital Investigation, 2026).</p><p>Includes: (a) source-level patches for libesedb that resolve the Windows Server 2025 / Windows 11 24H2 itagState reinterpretation failures spanning 4 KiB, 16 KiB and 32 KiB pages with a single format-revision-gated patch (a no-op by construction on databases below the gate; an equivalent fix is in upstream libesedb release 20260704); (b) a Rust-based NTDS.dit analysis tool (Poneglyph v0.2.3) incorporating the patch, plus the Fix 2 ablation pair used in the paper; (c) 22 ESE database samples (ntds.dit, DataStore.edb, WebCacheV01.dat, SRUDB.dat) populated under the Automated Artifact Population Framework on Windows Server 2019, Windows Server 2025 and a Windows 11 25H2 client, in Clean, service-stop and Locked (VSS) acquisition states; (d) a self-verifying reproduction sandbox (one <code>vagrant up</code> re-derives the paper's numbers as 69 pass/fail assertions and records the run) together with reproduction scripts and expected outputs.</p><p>See <code>README.md</code> for the full inventory and quick-start instructions, and <code>ETHICAL_USE.md</code> for the intended-use statement.</p>",
+  "description": "<p>Companion artifacts for the paper <strong>\"Silent Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure\"</strong> (Forensic Science International: Digital Investigation, 2026).</p><p>Includes: (a) source-level patches for libesedb that resolve the Windows Server 2025 / Windows 11 24H2 itagState reinterpretation failures spanning 4 KiB, 16 KiB and 32 KiB pages with a single format-revision-gated patch (a no-op by construction on databases below the gate; an equivalent fix is in upstream libesedb release 20260704); (b) a Rust-based NTDS.dit analysis tool (Poneglyph v0.2.3) incorporating the patch, plus the Fix 2 ablation pair used in the paper; (c) 22 ESE database samples (ntds.dit, DataStore.edb, WebCacheV01.dat, SRUDB.dat) populated under the Automated Artifact Population Framework on Windows Server 2019, Windows Server 2025 and a Windows 11 25H2 client, in Clean, service-stop and Locked (VSS) acquisition states; (d) a self-verifying reproduction sandbox (one <code>vagrant up</code> re-derives the paper's numbers as 69 pass/fail assertions and records the run) together with reproduction scripts and expected outputs.</p><p>See <code>README.md</code> for the full inventory and quick-start instructions, and <code>ETHICAL_USE.md</code> for the intended-use statement.</p>",
   "upload_type": "dataset",
-  "publication_date": "2026-10-04",
+  "publication_date": "2026-10-13",
   "version": "1.1.0",
   "creators": [
     {
@@ -63,5 +63,5 @@
     }
   ],
   "language": "eng",
-  "notes": "Version 1.1.0 (2026-10-04). The companion paper is under submission; its DOI will be added as a related identifier when assigned."
+  "notes": "Version 1.1.0 (2026-10-13). The companion paper is under submission; its DOI will be added as a related identifier when assigned."
 }
