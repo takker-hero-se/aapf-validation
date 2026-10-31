@@ -455,8 +455,8 @@ Write-Host ("          tagCount     = 0x{0:X4} & 0x0FFF = {1}" -f $raw, $count)
 Write-Host ("          N = {0}  ->  tag_array = 4 x {0} = {1} bytes  ->  OK" -f $count, (4*$count)) -ForegroundColor Green
 Check "masked tagCount (page 2)" 10 $count
 
-Write-Host "`n[7] 32KiB page partition  (reproduces Figure 5; page = 32768, header = 40)" -ForegroundColor Yellow
-$pg = 32768; $hs = 40
+Write-Host "`n[7] 32KiB page partition  (reproduces the page-layout figure; page = 32768, header = 80)" -ForegroundColor Yellow
+$pg = 32768; $hs = 80   # 16KiB+ pages at rev 0x11+ carry the 80-byte extended header (paper Eq. 2)
 $taWrong = 4 * $raw;   $daWrong = $pg - $hs - $taWrong;  $ghost = $taWrong - (4 * $count)
 $taRight = 4 * $count; $daRight = $pg - $hs - $taRight
 Write-Host ("    INCORRECT (N={0}): tag_array={1} B, data_area={2} B, GHOST tags={3} B (garbage)" -f $raw, $taWrong, $daWrong, $ghost) -ForegroundColor Red
