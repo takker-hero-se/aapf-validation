@@ -20,7 +20,7 @@ Everything below is regenerable from this record alone — see
 |---|---|
 | Guest OS | Windows Server 2022 Standard (Vagrant box `gusztavvargadr/windows-server-2022-standard`) |
 | Isolation | Private VM; no inbound network; corpus mounted read-only via HGFS |
-| Parser under test (patched) | `poneglyph.exe` v0.2.3 (revision-gated `libesedb`) |
+| Parser under test (patched) | `poneglyph.exe` v0.2.4 (revision-gated `libesedb`, gate `>= 0x010E`) |
 | Comparison parser | Impacket **v0.13.1** (`impacket.ese.ESENT_DB`) |
 | Native cross-check | Windows `esentutl /mh` |
 | Corpus | the `samples/` tree of this record (Clean state) |
@@ -101,7 +101,7 @@ in full.
 
 ## Video
 
-The full screen recording of the run (`[0]`–`[11]` in a live console, 1 min 57 s) is
+The full screen recording of the run (`[0]`–`[11]` in a live console, 2 min 30 s) is
 `verification-evidence/verification-final-69pass.mp4`. It is distributed with the
 **Zenodo record only** (kept out of the Git repository for size); the three
 screenshots above are frames extracted from it.

@@ -28,7 +28,7 @@ Verify by running `cargo metadata` and confirming that `libesedb-sys` resolves t
 
 ## Step 2 — Poneglyph source
 
-Clone Poneglyph from https://github.com/takker-hero-se/Poneglyph . Reference release: v0.2.3.
+Clone Poneglyph from https://github.com/takker-hero-se/Poneglyph . Reference release: v0.2.4 (gate moved to `0x010E`; v0.2.3 gated on `0x0122`).
 
 ## Step 3 — Build
 
@@ -74,8 +74,8 @@ rather than taken on trust:
 | `poneglyph-withfix2.exe` | 001-006 | Fix 1 (revision-gated `itagState` mask) **and** Fix 2 (B-tree `IS_LEAF` guard) |
 | `poneglyph-nofix2.exe` | 001-005 | Fix 1 only; patch `006-ws2025-btree` removed |
 
-Both were built on 2026-09-24 from one source tree (poneglyph 0.2.3), so the
-only difference between them is Fix 2. Running both over every sample in
+Both were built on 2026-11-02 from one source tree (poneglyph 0.2.4, itagState
+gate at format revision 0x010E), so the only difference between them is Fix 2. Running both over every sample in
 `samples/` gives identical table and record counts on all 22 of them, in every
 acquisition state, on both server editions and on the Windows 11 client.
 
@@ -86,6 +86,5 @@ Its triggering condition was observed once, in a dirty 32 KiB acquisition that
 is not part of the deposit, so a reviewer cannot reproduce the abort it
 prevents from these artifacts alone.
 
-Note that `poneglyph.exe` (the 0.2.3 release binary shipped here) is a third,
-earlier build and hashes differently from both; it is not one of the two
-compared above.
+`poneglyph.exe` is byte-identical to `poneglyph-withfix2.exe`: both are the
+0.2.4 release build carrying all six patches.

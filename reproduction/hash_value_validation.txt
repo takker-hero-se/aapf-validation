@@ -1,3 +1,7 @@
+# Note (2026-11-02): the deposited poneglyph.exe is now 0.2.4, whose itagState gate
+# sits at format revision 0x010E instead of 0x0122. The record below was produced
+# with 0.2.3; the sandbox re-derives the same counts with 0.2.4 on every run
+# (section [10] / [9] of reproduction/VERIFICATION.md), and no value changed.
 # Credential value-fidelity cross-validation: Poneglyph vs. impacket
 #
 # Purpose: demonstrate that Poneglyph's decrypted NT/LM hash VALUES (not merely the

@@ -39,6 +39,13 @@ v1.0.0 record (2026-06-22) and is now in the record.
 
 ### Changed
 
+- **The revision gate in `003-ws2025-itag-state.patch` moved from `0x0122` to `0x010E`**
+  (2026-11-02). `0x010E` is where Microsoft's engine-version table
+  (`sysver.cxx`, `JET_efvReservedTags` = 1568.270) introduces reserved tags;
+  `0x0122` was the lowest revision observed in shipped databases and remains
+  upstream libesedb's threshold. No result on the 22 samples changes, since the
+  lowest affected revision in the record is `0x0122`. `poneglyph.exe` and the
+  Fix 2 ablation pair are rebuilt from poneglyph 0.2.4 with the moved gate.
 - The sandbox now runs **69 assertions** rather than the original 32. The added
   sections are three negative controls that must trip, the client axis, a
   credential value-fidelity cross-check that re-derives the Poneglyph/Impacket

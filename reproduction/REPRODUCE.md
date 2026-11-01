@@ -30,7 +30,7 @@ The two scripts together complete in approximately 5 minutes on a modern Windows
 | Credential value fidelity (decrypted NT/LM hashes, not just record counts) | Run `poneglyph.exe hashes` (v0.2.3, `poneglyph/poneglyph.exe`) and Impacket `secretsdump.py` v0.13.1 on both NTDS.dit samples; compare NT hashes per RID | `hash_value_validation.txt` — 2{,}494/2{,}494 (WS2019) and 2{,}492/2{,}492 (WS2025) byte-for-byte matches, zero mismatches |
 | Client-side applicability (the format change is not server-only) | Run `poneglyph.exe info` and the Impacket ESE probe on the synthetic Windows 11 24H2+ client samples under `samples/{resource,health,activity}/w11-25h2/` | `client_applicability.txt` — 4/16/32 KiB all at revision `0x012C`; Impacket v0.13.1 still fails on the 4 KiB `SRUDB.dat` while the patch recovers all 15 tables |
 
-## Value fidelity and client applicability (poneglyph 0.2.3)
+## Value fidelity and client applicability (poneglyph 0.2.3, re-derived by the sandbox with 0.2.4)
 
 Two verification artifacts extend the count-based Table 5 checks. Both are
 pre-computed and shipped in this directory; the commands below regenerate them.

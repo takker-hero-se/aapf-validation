@@ -10,7 +10,7 @@ abstract: >-
   and 32 KiB pages with a single format-revision-gated patch (a no-op by
   construction on databases below the gate; an equivalent fix is in upstream
   libesedb release 20260704);
-  (b) a Rust-based NTDS.dit analysis tool (Poneglyph v0.2.3) incorporating the
+  (b) a Rust-based NTDS.dit analysis tool (Poneglyph v0.2.4) incorporating the
   patch, plus the Fix 2 ablation pair used in the paper;
   (c) 22 ESE database samples (ntds.dit, DataStore.edb, WebCacheV01.dat,
   SRUDB.dat) populated under the Automated Artifact Population Framework on

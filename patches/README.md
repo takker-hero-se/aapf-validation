@@ -17,9 +17,9 @@ Apply in the numeric order of the filename prefixes (`001-`, `002-`, …):
 
 ### `003-ws2025-itag-state.patch` (format-revision-gated `itagState` mask)
 
-The core patch of the paper. Modifies `libesedb/libesedb_page_header.c` to mask the `available_page_tag` field with `0x0FFF` immediately after reading it, **gated on the ESE format revision** (`io_handle->format_revision >= 0x0122`) rather than on page size.
+The core patch of the paper. Modifies `libesedb/libesedb_page_header.c` to mask the `available_page_tag` field with `0x0FFF` immediately after reading it, **gated on the ESE format revision** (`io_handle->format_revision >= 0x010E`) rather than on page size. The threshold is the engine's own: Microsoft's `sysver.cxx` maps `JET_efvReservedTags` to database version 1568.270, i.e. update-major `0x010E`. The lowest revision observed in shipped databases is `0x0122` (Windows Server 2025 `NTDS.dit`), which is the value upstream libesedb gates on; moving to `0x010E` changes no result on this corpus.
 
-Gating on the format revision is required to resolve the WS2025 16 KiB `DataStore.edb` and 4 KiB `SRUDB.dat` failures reported in Sections 6 and 7 of the companion paper: those databases report revision `0x012C`, which a page-size gate (`page_size >= 32768`, as in Fox-IT's `dissect.esedb` PR #46) misses. WS2025 `NTDS.dit` reports `0x0122`; all WS2025 artifacts are therefore `>= 0x0122`.
+Gating on the format revision is required to resolve the WS2025 16 KiB `DataStore.edb` and 4 KiB `SRUDB.dat` failures reported in Sections 6 and 7 of the companion paper: those databases report revision `0x012C`, which a page-size gate (`page_size >= 32768`, as in Fox-IT's `dissect.esedb` PR #46) misses. WS2025 `NTDS.dit` reports `0x0122`; all WS2025 artifacts are therefore above the gate.
 
 Backward compatibility is preserved **by construction**: pre-WS2025 databases report revision `0x0014`, so the gate never fires and the mask is a guaranteed no-op — including on dense 32 KiB legacy pages whose tag count could exceed the 12-bit field and be truncated by an unconditional mask.
 
