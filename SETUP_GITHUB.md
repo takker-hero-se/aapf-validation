@@ -70,8 +70,7 @@ git status --short | Measure-Object | Select-Object -ExpandProperty Count
 # First commit
 git commit -m "Initial commit: AAPF validation patches, scripts, and documentation
 
-Companion artifacts for 'Silent Evidence Loss in Windows Server 2025:
-Cross-Page-Size ESE Format Changes and Their Forensic Integrity Implications'
+Companion artifacts for 'Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure'
 (FSI:DI 2026).
 
 Patches:
@@ -119,8 +118,7 @@ On GitHub:
 4. **Description**:
    ```markdown
    First public release of the AAPF Validation Dataset, accompanying the paper
-   *Silent Evidence Loss in Windows Server 2025: Cross-Page-Size ESE Format Changes
-   and Their Forensic Integrity Implications* (Forensic Science International:
+   *Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure* (Forensic Science International:
    Digital Investigation, 2026).
 
    ## Highlights

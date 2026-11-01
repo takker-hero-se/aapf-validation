@@ -262,7 +262,7 @@ print("OPEN-OK tables=%d" % (len(tabs) if tabs else 0))
 }
 Clear-Host
 Write-Host "============================================================" -ForegroundColor Cyan
-Write-Host "  AAPF empirical verification  (paper: Silent Evidence Loss)" -ForegroundColor Cyan
+Write-Host "  AAPF empirical verification  (ESE format-revision paper; see VERIFICATION.md)" -ForegroundColor Cyan
 Write-Host "  corpus: $S" -ForegroundColor Cyan
 Write-Host "  $(Get-Date -Format o)" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan

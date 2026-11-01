@@ -46,9 +46,13 @@ v1.0.0 record (2026-06-22) and is now in the record.
   `reproduction/hash_value_validation.txt`, and three-parser record-count
   agreement.
 - `reproduction/verification-evidence/` now holds the 69-assertion run recorded
-  on 2026-09-23 (69 PASS / 0 FAIL). It replaces the 32-assertion run of
-  2026-09-04, which the documentation had outgrown.
-- The companion paper's title is now "Silent Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure" (revised 2026-10-08 after co-author review); the dataset title gains "and
+  on 2026-11-01 (69 PASS / 0 FAIL). It replaces the 32-assertion run of
+  2026-09-04, which the documentation had outgrown. Section [7] of the harness
+  now partitions the 32 KiB page with its 80-byte extended header, as the
+  paper's Eq. 2 and page-layout figure do; the earlier 40-byte constant made
+  the recorded data area 16 304 B instead of 16 264 B, and nothing else in
+  the transcript changed.
+- The companion paper's title is now "Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure" (revised 2026-10-29 after the third co-author review, which dropped "Silent" because only one of the three measured failures is exit-0 with no output); the dataset title gains "and
   Windows 11" to match the client axis. Hiroshi Koide (Kyushu University) is
   a co-author of the paper; the dataset creator is unchanged.
 - "Previously unreported" is no longer claimed: Microsoft's open-source engine

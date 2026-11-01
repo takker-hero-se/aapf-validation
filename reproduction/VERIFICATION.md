@@ -1,7 +1,7 @@
 # Verification Evidence
 
 This document records an **end-to-end, self-recording verification** of every
-quantitative claim, table value, and figure in the paper *"Silent Evidence Loss
+quantitative claim, table value, and figure in the paper *"Evidence Loss
 in Modern Windows"*, run against the deposited AAPF corpus inside a disposable,
 network-isolated Windows sandbox.
 
@@ -86,22 +86,22 @@ at `(N+1) × page_size`) of
   16 424` B (out of bounds); read correctly = `ctagReserved = 1`, count = `10` →
   `40` B.
 - **Figure 5** — on the 32 KiB page: misread leaves a `16 384`-byte "ghost tag"
-  region of garbage; correct read leaves a `32 688`-byte data area.
+  region of garbage; correct read leaves a `32 648`-byte data area.
 - **Figure 3 / 4** — the fully-zeroed page at `0x98000` is 64/64 bytes `0x00`, so
   `page_flags = 0x0000` and `IS_LEAF (0x0002)` is not set — the trigger for the
   backward leaf-walk error the patch fixes.
 
 ## Full text log
 
-The complete console transcript of the run recorded on 2026-09-22 (sections
-`[0]`–`[10]`, UTF-16) is
+The complete console transcript of the run recorded on 2026-11-01 (sections
+`[0]`–`[11]`, UTF-16) is
 [`verification-evidence/verification-final-69pass.log`](verification-evidence/verification-final-69pass.log).
 The three frames above cover every section between them; the log holds the run
 in full.
 
 ## Video
 
-The full screen recording of the run (`[0]`–`[10]` in a live console, 1 min 01 s) is
+The full screen recording of the run (`[0]`–`[11]` in a live console, 1 min 57 s) is
 `verification-evidence/verification-final-69pass.mp4`. It is distributed with the
 **Zenodo record only** (kept out of the Git repository for size); the three
 screenshots above are frames extracted from it.

@@ -4,7 +4,7 @@ Thank you for your interest in contributing to the AAPF Validation project. This
 
 ## Scope
 
-This repository is the companion artifact for the FSI:DI 2026 paper *Silent Evidence Loss in Windows Server 2025: Cross-Page-Size ESE Format Changes and Their Forensic Integrity Implications*. Contributions are most valuable when they:
+This repository is the companion artifact for the FSI:DI 2026 paper *Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure*. Contributions are most valuable when they:
 
 1. **Extend AAPF coverage** — additional ESE artifacts (Windows Search `Windows.edb`, Exchange `priv.edb`, Lync archives), additional OS versions, additional snapshot states.
 2. **Improve reproduction** — port `reproduction/*.ps1` to bash for Linux examiners, add Jupyter notebooks for visual inspection, add Docker images for reproducibility.

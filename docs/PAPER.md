@@ -4,7 +4,7 @@ This Zenodo record accompanies the following paper.
 
 ## Title
 
-*Silent Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure*
+*Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure*
 
 ## Authors
 
