@@ -25,6 +25,10 @@ authors:
     email: takker0708@gmail.com
     affiliation: Independent Researcher
     orcid: "https://orcid.org/0009-0005-6735-1862"
+  - family-names: Koide
+    given-names: Hiroshi
+    affiliation: Kyushu University
+    orcid: "https://orcid.org/0009-0008-7111-8053"
 date-released: 2026-11-07
 version: "1.1.1"
 license: "CC-BY-4.0"

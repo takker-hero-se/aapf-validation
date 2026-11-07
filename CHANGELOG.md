@@ -27,9 +27,9 @@ carries everything listed under [1.1.0] plus the changes here.
   Format Revision, Not the Page Size, Governs Parser Failure" (revised
   2026-10-29 after the third co-author review, which dropped "Silent" because
   only one of the three measured failures is exit-0 with no output).
-- Hiroshi Koide (Kyushu University, ORCID 0009-0008-7111-8053), co-author and
-  supervisor of the companion paper, is linked to the record as a contributor
-  (role: Supervisor). The dataset creator is unchanged.
+- Hiroshi Koide (Kyushu University, ORCID 0009-0008-7111-8053), co-author of
+  the companion paper, is added as the second creator of the record with his
+  consent (by e-mail), so the dataset's authorship matches the paper's.
 
 ## [1.1.0] — 2026-10-04 (GitHub tag only; not deposited)
 
@@ -78,9 +78,7 @@ with 1.1.1 above.
   on 2026-09-23 (69 PASS / 0 FAIL). It replaces the 32-assertion run of
   2026-09-04, which the documentation had outgrown.
 - The companion paper's title was revised after co-author review (2026-10-08);
-  the dataset title gains "and Windows 11" to match the client axis. Hiroshi
-  Koide (Kyushu University) is a co-author of the paper; the dataset creator
-  is unchanged.
+  the dataset title gains "and Windows 11" to match the client axis.
 - "Previously unreported" is no longer claimed: Microsoft's open-source engine
   headers define the itagState split, and the dissect.esedb and Impacket
   threads reported the 4 KiB and 32 KiB cases first. The paper's claim is the
