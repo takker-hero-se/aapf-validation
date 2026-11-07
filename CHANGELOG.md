@@ -2,10 +2,39 @@
 
 All notable changes to this Zenodo record are documented here. Versioning follows [Semantic Versioning](https://semver.org/) for the dataset; patch releases denote corrections that do not change the contents (e.g., documentation typo fixes).
 
-## [1.1.0] — 2026-10-04
+## [1.1.1] — 2026-11-07
 
-Second Zenodo version. Everything below was in the repository after the
-v1.0.0 record (2026-06-22) and is now in the record.
+Second Zenodo version, and the first deposit after the v1.0.0 record. The
+v1.1.0 tag below was pushed to GitHub but never deposited; this version
+carries everything listed under [1.1.0] plus the changes here.
+
+### Changed
+
+- **The revision gate in `003-ws2025-itag-state.patch` moved from `0x0122` to `0x010E`**
+  (2026-11-02). `0x010E` is where Microsoft's engine-version table
+  (`sysver.cxx`, `JET_efvReservedTags` = 1568.270) introduces reserved tags;
+  `0x0122` was the lowest revision observed in shipped databases and remains
+  upstream libesedb's threshold. No result on the 22 samples changes, since the
+  lowest affected revision in the record is `0x0122`. `poneglyph.exe` and the
+  Fix 2 ablation pair are rebuilt from poneglyph 0.2.4 with the moved gate.
+- `reproduction/verification-evidence/` now holds the 69-assertion run recorded
+  on 2026-11-01 (69 PASS / 0 FAIL), replacing the 2026-09-23 run. Section [7]
+  of the harness now partitions the 32 KiB page with its 80-byte extended
+  header, as the paper's Eq. 2 and page-layout figure do; the earlier 40-byte
+  constant made the recorded data area 16 304 B instead of 16 264 B, and
+  nothing else in the transcript changed.
+- The companion paper's title is now "Evidence Loss in Modern Windows: The ESE
+  Format Revision, Not the Page Size, Governs Parser Failure" (revised
+  2026-10-29 after the third co-author review, which dropped "Silent" because
+  only one of the three measured failures is exit-0 with no output).
+- Hiroshi Koide (Kyushu University, ORCID 0009-0008-7111-8053), co-author and
+  supervisor of the companion paper, is linked to the record as a contributor
+  (role: Supervisor). The dataset creator is unchanged.
+
+## [1.1.0] — 2026-10-04 (GitHub tag only; not deposited)
+
+Tagged on GitHub as `v1.1.0` (commit 63126a7). Its contents reached Zenodo
+with 1.1.1 above.
 
 ### Added
 
@@ -39,13 +68,6 @@ v1.0.0 record (2026-06-22) and is now in the record.
 
 ### Changed
 
-- **The revision gate in `003-ws2025-itag-state.patch` moved from `0x0122` to `0x010E`**
-  (2026-11-02). `0x010E` is where Microsoft's engine-version table
-  (`sysver.cxx`, `JET_efvReservedTags` = 1568.270) introduces reserved tags;
-  `0x0122` was the lowest revision observed in shipped databases and remains
-  upstream libesedb's threshold. No result on the 22 samples changes, since the
-  lowest affected revision in the record is `0x0122`. `poneglyph.exe` and the
-  Fix 2 ablation pair are rebuilt from poneglyph 0.2.4 with the moved gate.
 - The sandbox now runs **69 assertions** rather than the original 32. The added
   sections are three negative controls that must trip, the client axis, a
   credential value-fidelity cross-check that re-derives the Poneglyph/Impacket
@@ -53,15 +75,12 @@ v1.0.0 record (2026-06-22) and is now in the record.
   `reproduction/hash_value_validation.txt`, and three-parser record-count
   agreement.
 - `reproduction/verification-evidence/` now holds the 69-assertion run recorded
-  on 2026-11-01 (69 PASS / 0 FAIL). It replaces the 32-assertion run of
-  2026-09-04, which the documentation had outgrown. Section [7] of the harness
-  now partitions the 32 KiB page with its 80-byte extended header, as the
-  paper's Eq. 2 and page-layout figure do; the earlier 40-byte constant made
-  the recorded data area 16 304 B instead of 16 264 B, and nothing else in
-  the transcript changed.
-- The companion paper's title is now "Evidence Loss in Modern Windows: The ESE Format Revision, Not the Page Size, Governs Parser Failure" (revised 2026-10-29 after the third co-author review, which dropped "Silent" because only one of the three measured failures is exit-0 with no output); the dataset title gains "and
-  Windows 11" to match the client axis. Hiroshi Koide (Kyushu University) is
-  a co-author of the paper; the dataset creator is unchanged.
+  on 2026-09-23 (69 PASS / 0 FAIL). It replaces the 32-assertion run of
+  2026-09-04, which the documentation had outgrown.
+- The companion paper's title was revised after co-author review (2026-10-08);
+  the dataset title gains "and Windows 11" to match the client axis. Hiroshi
+  Koide (Kyushu University) is a co-author of the paper; the dataset creator
+  is unchanged.
 - "Previously unreported" is no longer claimed: Microsoft's open-source engine
   headers define the itagState split, and the dissect.esedb and Impacket
   threads reported the 4 KiB and 32 KiB cases first. The paper's claim is the

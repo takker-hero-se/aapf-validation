@@ -102,7 +102,7 @@ If you use this dataset, please cite both the paper and the dataset.
 
 For the dataset, use the BibTeX in `CITATION.cff` or simply:
 
-> Hirose, T. (2026). *AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025 and Windows 11* (Version 1.1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.20789635
+> Hirose, T. (2026). *AAPF Validation Dataset: Cross-Page-Size ESE Format Changes in Windows Server 2025 and Windows 11* (Version 1.1.1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.20789635
 
 For the paper, see `docs/PAPER.md`.
 
