@@ -40,7 +40,7 @@ Submitted 2026; under peer review at the time of this dataset release.
 
 ## DOI
 
-This dataset: `10.5281/zenodo.20789636` (assigned at upload; update CITATION.cff and the in-text references to this DOI before final paper submission).
+This dataset: version DOI `10.5281/zenodo.23344091` (v1.1.1, 2026-11-08; the paper's Availability section and BibTeX entry cite it). v1.0.0 was `10.5281/zenodo.20789636`. Concept DOI `10.5281/zenodo.20789635` resolves to the latest version.
 
 Companion paper DOI: assigned by Elsevier on acceptance; add here when known.
 

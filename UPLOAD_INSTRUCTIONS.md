@@ -185,7 +185,9 @@ The v1.0.0 record was uploaded by hand as one zip. Later versions follow the sam
 2. Spot-check three files against `MANIFEST.md` and confirm the zip has no `.git/` entries (`python -c "import zipfile; ..."`).
 3. Commit the repository, tag `v1.1.0`, push the commits and the tag. (A tag does not trigger the integration; only a Release does.)
 4. On https://zenodo.org, open the existing record (concept DOI 10.5281/zenodo.20789635) → **New version**.
-5. Remove the inherited `aapf-validation-1.0.0.zip`; upload `aapf-validation-1.1.0.zip` (~245 MB).
+5. Remove the inherited zip; upload `aapf-validation-<version>.zip` (~225 MB). The browser uploader
+   or `tools\zenodo_upload_file.ps1` (REST API, needs `$env:ZENODO_TOKEN` with `deposit:write`;
+   it verifies the server-side MD5 and never publishes) both work.
 6. Metadata: set the title, description, version `1.1.0` and publication date from `.zenodo.json`; keep creators, license (CC-BY-4.0) and related identifiers.
 7. **Publish**. Zenodo assigns the version DOI; the concept DOI keeps resolving to the latest version.
-8. Afterwards: record the version DOI in `CHANGELOG.md`, and in the paper cite either the version DOI or the concept DOI (the paper currently cites the v1.0.0 version DOI 10.5281/zenodo.20789636, which will keep pointing at v1.0.0).
+8. Afterwards: record the version DOI in `CHANGELOG.md` and update the paper's Availability section and BibTeX entry (v1.1.1 is 10.5281/zenodo.23344091, published 2026-11-08; v1.0.0 was 10.5281/zenodo.20789636).

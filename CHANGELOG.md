@@ -4,6 +4,9 @@ All notable changes to this Zenodo record are documented here. Versioning follow
 
 ## [1.1.1] — 2026-11-07
 
+Version DOI: [10.5281/zenodo.23344091](https://doi.org/10.5281/zenodo.23344091)
+(published 2026-11-08; concept DOI 10.5281/zenodo.20789635 resolves to it).
+
 Second Zenodo version, and the first deposit after the v1.0.0 record. The
 v1.1.0 tag below was pushed to GitHub but never deposited; this version
 carries everything listed under [1.1.0] plus the changes here.
