@@ -106,6 +106,8 @@ Initial public release accompanying paper submission.
   in **release 20260704** (2026-07-04). These patches reproduce the paper's pinned
   `libesedb-sys` 0.2.1 build; on current upstream the equivalent fix is already present.
   Page-size-gated tools (Impacket, `dissect.esedb`) still miss the 4 KiB case.
+  On 2026-11-12 we proposed lowering the upstream gate to `0x010E` (the engine's
+  `JET_efvReservedTags` revision) in [libesedb issue #81](https://github.com/libyal/libesedb/issues/81).
 
 ### Includes
 

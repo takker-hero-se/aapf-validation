@@ -23,7 +23,7 @@ Gating on the format revision is required to resolve the WS2025 16 KiB `DataStor
 
 Backward compatibility is preserved **by construction**: pre-WS2025 databases report revision `0x0014`, so the gate never fires and the mask is a guaranteed no-op — including on dense 32 KiB legacy pages whose tag count could exceed the 12-bit field and be truncated by an unconditional mask.
 
-> **Upstream status.** After the defect was reported (issue #78, PR #79), the `libesedb` maintainer incorporated an equivalent format-revision-gated fix (`format_revision >= 0x0122`, commit `768a0474`) and shipped it in **release 20260704** (2026-07-04). These patches reproduce the paper's build against the pinned `libesedb-sys` 0.2.1 and remain useful for that purpose; on current upstream `libesedb` the equivalent fix is already present. Page-size-gated tools (e.g., Impacket, `dissect.esedb`) still miss the 4 KiB case.
+> **Upstream status.** After the defect was reported (issue #78, PR #79), the `libesedb` maintainer incorporated an equivalent format-revision-gated fix (`format_revision >= 0x0122`, commit `768a0474`) and shipped it in **release 20260704** (2026-07-04). These patches reproduce the paper's build against the pinned `libesedb-sys` 0.2.1 and remain useful for that purpose; on current upstream `libesedb` the equivalent fix is already present. Page-size-gated tools (e.g., Impacket, `dissect.esedb`) still miss the 4 KiB case. A follow-up proposal to lower the upstream gate to `0x010E` (the engine's `JET_efvReservedTags` revision, the value this patch now uses) is [libesedb issue #81](https://github.com/libyal/libesedb/issues/81) (2026-11-12).
 
 ### `006-ws2025-btree.patch` (B-tree `IS_LEAF` validation)
 
